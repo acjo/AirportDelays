@@ -6,7 +6,8 @@ import scipy
 def data_cleaning():
     '''This function cleans the data we will be using
     :return:
-    data: pandas dataframe with the cleaned data
+    flight_2016: pandas dataframe with the cleaned flight data from 2016
+    flight_2017: pandas dataframe with the cleaned fligth data from 2017
     '''
     flight_2016 = pd.read_csv('flight.csv', delimiter=',')
     #drop useless flight data
@@ -18,9 +19,13 @@ def data_cleaning():
                       'Security_Delay', 'Late_Aircraft_Delay', 'Top_Carriers', 'Top_Origin',
                       'DEPTIME_GROUP1', 'DEPTIME_GROUP2', 'DEPTIME_GROUP3' ], axis=1, inplace=True)
 
-    print(flight_2016.columns)
-    #flight_2017 = pd.read_csv('fl_samp.csv', delimiter=',')
+    flight_2017 = pd.read_csv('fl_samp.csv', delimiter=',')
+    #drop useless flight data
+    flight_2017.drop(['Year', 'Month', 'Day', 'Flight_Date', 'UniqueCarrier', 'Departure_Time',
+                      'Scheduled_Arrival', 'Arrival_Delay', 'Arr_Del_morethan15', 'DistanceGroup',
+                      'Carrier_Delay', 'WeatherDelay', 'NAS_Delay', 'Late_Aircraft_Delay',
+                      'DEPTIME_GROUP1', 'DEPTIME_GROUP2', 'DEPTIME_GROUP3' ], axis=1, inplace=True)
 
 
-    return
+    return flight_2016, flight_2017
 data_cleaning()
