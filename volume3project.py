@@ -13,6 +13,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.tree import export_graphviz
 from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import recall_score
 
 def data_cleaning():
     '''This function cleans the data we will be using
@@ -58,15 +59,26 @@ def train_test_data(flight_2016, train_size=0.7, smote=False):
 
 
 def best_kNN(flight_2016):
+    '''Calculates the best hyperparameters for the KNeightborsClassifier, then uses those to
+    classify the data
+        Parameters:
+            flight_2016 (Pandas Dataframe): Any data really, but in this case the flight data
+        Returns:
+            best_score (float) best accuracy from the data
+            recall (recall) best recall score from the data 
+            hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(flight_2016)
 
     neighborclassifier = KNeighborsClassifier(n_neighbors=3)
     
-    parameters = {'max_depth':[4,10], 'min_samples_leaf':(5,10,20,50,100), 'max_leaf_nodes':(5,10,15,20,25)}
+    parameters = {'n_neighbors':[2,10], 'weights': ('uniform','distance'), 'leaf_size':[20,50], "p":(1,2)}
     gridsearch = GridSearchCV(neighborclassifier, parameters)
     gridsearch.fit(X_train, y_train)
-    
-    return
+    prediction = gridsearch.predict(X_test)
+    best_params = gridsearch.best_params_
+    best_score = gridsearch.best_estimator_.score(X_test,y_test)
+    recall = recall_score(y_test,prediction)
+    return best_score, recall, best_params
 
 flight_2016, flight_2017 = data_cleaning()
 
