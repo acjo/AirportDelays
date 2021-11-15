@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import scipy
+from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
@@ -41,6 +41,40 @@ def data_cleaning():
 
     return flight_2016, flight_2017
 
+def plot_data():
+    '''Creates some plots of the data from 2016 and 2017
+    '''
+    flight_2016, flight_2017 = data_cleaning()
+    #plot 2016 histogram
+    fig = plt.figure()
+    fig.set_dpi(150)
+    plt.hist(flight_2016['Dep_Delay'], color='skyblue', ec='black' )
+    plt.title('Departure delay times from 2016')
+    plt.show()
+
+    #plot 2016 histogram with log scale
+    fig = plt.figure()
+    fig.set_dpi(150)
+    plt.hist(flight_2016['Dep_Delay'], log=True, bins=10, color='skyblue', ec='black' )
+    plt.title('Departure delay times from 2016 log scale')
+    plt.show()
+
+    #plot 2017 histogram
+    fig = plt.figure()
+    fig.set_dpi(150)
+    plt.hist(flight_2017['Dep_Delay'], color='skyblue', ec='black' )
+    plt.title('Departure delay times from 2017')
+    plt.show()
+
+    #plot 2017 histogram with log scale
+    fig = plt.figure()
+    fig.set_dpi(150)
+    plt.hist(flight_2017['Dep_Delay'], log=True, bins=10, color='skyblue', ec='black' )
+    plt.title('Departure delay times from 2017 log scale')
+    plt.show()
+
+    return
+
 def train_test_data(flight_2016, train_size=0.7, smote=False):
     ''' This function takes in the flight data from 2016 and returns a train_test_split of the data
     :param flight_2016: pandas dataframe containing data
@@ -78,7 +112,7 @@ def best_kNN(flight_2016):
     recall = recall_score(y_test,prediction)
     return best_score, recall, best_params
 
-flight_2016, flight_2017 = data_cleaning()
+
 
 #kNN
 #NaiveBayes
