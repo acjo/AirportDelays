@@ -134,7 +134,7 @@ def best_logistic(flight_2016):
     return best_score, recall, best_params
 
 def best_elastic(flight_2016):
-    '''Calculates the best hyperparameters for the LogisticRegression, then uses those to
+    '''Calculates the best hyperparameters for the ElasticRegression, then uses those to
     classify the data
         Parameters:
             flight_2016 (Pandas Dataframe): Any data really, but in this case the flight data
@@ -143,10 +143,10 @@ def best_elastic(flight_2016):
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(flight_2016)
-    logisticregression = ElasticNet()
-    parameters = {'penalty':('l1', 'l2', 'elasticnet', 'none'), 'tol':(1e-6,1e-5,1e-4,1e-3,1e-2),\
-        'C':(.1,.3,.5,.8,1,1.2,1.5,1.8), "fit_intercept":(False,True)}
-    gridsearch = GridSearchCV(logisticregression, parameters)
+    elastic_regression = ElasticNet()
+    parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
+        'fit_intercept':(True,False), "normalize":(False,True)}
+    gridsearch = GridSearchCV(elastic_regression, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
