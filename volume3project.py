@@ -7,11 +7,10 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import ElasticNet
 
-from sklearn.tree import RandomForestClassifier
-from sklearn.tree import RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
 from sklearn.tree import export_graphviz
 from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import recall_score
+#from sklearn.model_selection import recall_score
 
 def data_cleaning():
     '''This function cleans the data we will be using
@@ -73,20 +72,35 @@ def plot_data():
 
     return
 
-def train_test_data(flight_2016, train_size=0.7, smote=False):
+def train_test_data(train_size=0.7, binary=True):
     ''' This function takes in the flight data from 2016 and returns a train_test_split of the data
     :param flight_2016: pandas dataframe containing data
-    :param test_size: the amount of data to test on defualts to a 70-30 train test split
+    :param train_size: the amount of data to test on defualts to a 70-30 train test split
     :param smote: parameter to include smote data (to augment points with large delay times that
                   may be infrequent).
     :return X_train, X_test, y_train, y_test:
     '''
-    if not smote:
+    flight_2016, _  = data_cleaning()
+    #get the labels for delay
+    #y = flight_2016['Dep_Delay']
+    #get our predictors
+    #X = flight_2016.drop(['Dep_Delay'], axis=1, inplace=True)
+    if binary:
+        mask_on_time = flight_2016['Dep_Delay'] <= 0
+        flight_2016['Dep_Delay'][mask_on_time] = 0
+        flight_2016['Dep_Delay'][~mask_on_time] = 1
+        y = flight_2016['Dep_Delay']
+        X = flight_2016.drop(['Dep_Delay'], axis=1)
 
-        pass
-
+        X_train, X_test, y_train, y_test = train_test_split(X,
+                                                            y,
+                                                            train_size=train_size,
+                                                            random_state=42)
     else:
+
         pass
+
+    return X_train, X_test, y_train, y_test
 
 
 
@@ -220,4 +234,9 @@ def best_Gaussian(flight_2016):
 #LogisticRegression
 #OLS
 #
-
+if __name__ == "__main__":
+    pass
+    #flight_2016, flight_2017 = data_cleaning()
+    #print(pd.unique(flight_2016['Dep_Delay']))
+    #print(flight_2016['Dep_Delay'].value_counts())
+    #X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=True)
