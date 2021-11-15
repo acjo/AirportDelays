@@ -1,7 +1,18 @@
 import numpy as np
 import pandas as pd
-import sklearn
 import scipy
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import Ridge
+from sklearn.linear_model import Lasso
+from sklearn.linear_model import ElasticNet
+
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.tree import export_graphviz
+from sklearn.model_selection import GridSearchCV
 
 def data_cleaning():
     '''This function cleans the data we will be using
@@ -29,4 +40,35 @@ def data_cleaning():
 
     return flight_2016, flight_2017
 
-data_cleaning()
+def train_test_data(flight_2016, train_size=0.7, smote=False):
+    ''' This function takes in the flight data from 2016 and returns a train_test_split of the data
+    :param flight_2016: pandas dataframe containing data
+    :param test_size: the amount of data to test on defualts to a 70-30 train test split
+    :param smote: parameter to include smote data (to augment points with large delay times that
+                  may be infrequent).
+    :return X_train, X_test, y_train, y_test:
+    '''
+    if not smote:
+
+        pass
+
+    else:
+        pass
+
+
+
+def best_kNN(flight_2016):
+
+
+
+    return
+
+flight_2016, flight_2017 = data_cleaning()
+
+#kNN
+#NaiveBayes
+#RandomForrest
+#LogisticRegression
+#OLS
+#
+
