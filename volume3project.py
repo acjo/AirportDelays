@@ -58,9 +58,14 @@ def train_test_data(flight_2016, train_size=0.7, smote=False):
 
 
 def best_kNN(flight_2016):
+    X_train,X_test,y_train,y_test = train_test_data(flight_2016)
 
-
-
+    neighborclassifier = KNeighborsClassifier(n_neighbors=3)
+    
+    parameters = {'max_depth':[4,10], 'min_samples_leaf':(5,10,20,50,100), 'max_leaf_nodes':(5,10,15,20,25)}
+    gridsearch = GridSearchCV(neighborclassifier, parameters)
+    gridsearch.fit(X_train, y_train)
+    
     return
 
 flight_2016, flight_2017 = data_cleaning()
