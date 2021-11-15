@@ -28,4 +28,5 @@ def data_cleaning():
 
 
     return flight_2016, flight_2017
+
 data_cleaning()
