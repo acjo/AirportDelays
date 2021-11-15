@@ -68,9 +68,7 @@ def best_kNN(flight_2016):
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(flight_2016)
-
-    neighborclassifier = KNeighborsClassifier(n_neighbors=3)
-    
+    neighborclassifier = KNeighborsClassifier()
     parameters = {'n_neighbors':[2,10], 'weights': ('uniform','distance'), 'leaf_size':[20,50], "p":(1,2)}
     gridsearch = GridSearchCV(neighborclassifier, parameters)
     gridsearch.fit(X_train, y_train)
