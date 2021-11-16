@@ -72,6 +72,34 @@ def plot_data():
 
     return
 
+def smote(X,N,k):
+    """ Generate synthetic points using the SMOTE method.
+    Parameters:
+        X (n,m): minority class samples
+        N (int): number of samples to generate from each point
+        k (int): number of nearest neighbors
+    Returns:
+        synthetic ndarray(N*n,m): synthetic minority class samples
+    """
+    # the number of columns in the number features and
+    # the number of rows is the number of observations (points)
+    n, m = X.shape
+    synthetic_samples = np.zeros((N*n, m))
+    #create tree
+    tree = KDTree(X)
+    for i in range(m):
+        #get k nearest neighbors for the current row
+        dist, indices = tree.query(X[i:i+1], k=k)
+        #now we have to create our new samples
+        for j in range(N):
+            #random choice of the nearest neighbors
+            neighbor = X[indices[0][np.random.randint(len(indices[0]))]]
+            #now generate a random point that lies between the two original values
+            random_point = np.random.uniform(0, 1, m)
+            #set the row of the new array
+            synthetic_samples[i*N+j] = X[i] + (neighbor - X[i])*random_point
+
+    return synthetic_samples
 def train_test_data(train_size=0.7, binary=True):
     ''' This function takes in the flight data from 2016 and returns a train_test_split of the data
     :param flight_2016: pandas dataframe containing data
@@ -97,6 +125,9 @@ def train_test_data(train_size=0.7, binary=True):
                                                             train_size=train_size,
                                                             random_state=42)
     else:
+        mask_on_time = flight_2016['Dep_Delay'] <=0
+        mask_15_late = flight_2016['Dep_Delay'] < 0 | flight_2016['Dep_Delay'] <=15
+        #we need to smote data first
 
         pass
 
@@ -239,4 +270,4 @@ if __name__ == "__main__":
     #flight_2016, flight_2017 = data_cleaning()
     #print(pd.unique(flight_2016['Dep_Delay']))
     #print(flight_2016['Dep_Delay'].value_counts())
-    #X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=True)
+    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
