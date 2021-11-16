@@ -27,7 +27,7 @@ def data_cleaning():
                       'Departure_Time', 'DepDel15', 'Dep_Delay_Groups',
                       'Arrival_Time', 'Arrival_Delay', 'Arr_Delay_Minutes',
                       'Arr_Del_morethan15', 'Cancelled', 'Diverted',
-                      'DistanceGroup', 'Carrier_Delay', 'WeatherDelay', 'NAS_Delay',
+                      'DistanceGroup', 'UniqueCarrier', 'Carrier_Delay', 'WeatherDelay', 'NAS_Delay',
                       'Security_Delay', 'Late_Aircraft_Delay', 'Top_Carriers', 'Top_Origin',
                       'DEPTIME_GROUP1', 'DEPTIME_GROUP2', 'DEPTIME_GROUP3' ], axis=1, inplace=True)
 
@@ -113,6 +113,11 @@ def train_test_data(train_size=0.7, binary=True):
     :return X_train, X_test, y_train, y_test:
     '''
     flight_2016, _  = data_cleaning()
+    #one hot encode
+    flight_2016 = pd.get_dummies(flight_2016, columns=['Tai_lNum',
+                                                       'Origin_Airport',
+                                                       'Origin_City_Name',
+                                                       'Origin_State' ], drop_first=True)
     if binary:
         #create the binary labels for if you were late or not
 
