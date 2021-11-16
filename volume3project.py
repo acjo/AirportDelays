@@ -5,12 +5,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.linear_model import Ridge
-from sklearn.linear_model import Lasso
 from sklearn.linear_model import ElasticNet
 
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.tree import RandomForestClassifier
+from sklearn.tree import RandomForestRegressor
 from sklearn.tree import export_graphviz
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import recall_score
@@ -135,7 +133,7 @@ def best_logistic(flight_2016):
 
 def best_elastic(flight_2016):
     '''Calculates the best hyperparameters for the ElasticRegression, then uses those to
-    classify the data
+    predict the data
         Parameters:
             flight_2016 (Pandas Dataframe): Any data really, but in this case the flight data
         Returns:
@@ -147,6 +145,48 @@ def best_elastic(flight_2016):
     parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
         'fit_intercept':(True,False), "normalize":(False,True)}
     gridsearch = GridSearchCV(elastic_regression, parameters)
+    gridsearch.fit(X_train, y_train)
+    prediction = gridsearch.predict(X_test)
+    best_params = gridsearch.best_params_
+    best_score = gridsearch.best_estimator_.score(X_test,y_test)
+    recall = recall_score(y_test,prediction)
+    return best_score, recall, best_params
+
+def best_random_forest_reg(flight_2016):
+    '''Calculates the best hyperparameters for the RandomForestRegression, then uses those to
+    predict the data
+        Parameters:
+            flight_2016 (Pandas Dataframe): Any data really, but in this case the flight data
+        Returns:
+            best_score (float) best accuracy from the data
+            recall (recall) best recall score from the data 
+            hyperparameters (dictionary) best hyperparameters from the data'''
+    X_train,X_test,y_train,y_test = train_test_data(flight_2016)
+    random_forest_regression = RandomForestRegressor()
+    parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
+        'fit_intercept':(True,False), "normalize":(False,True)}
+    gridsearch = GridSearchCV(random_forest_regression, parameters)
+    gridsearch.fit(X_train, y_train)
+    prediction = gridsearch.predict(X_test)
+    best_params = gridsearch.best_params_
+    best_score = gridsearch.best_estimator_.score(X_test,y_test)
+    recall = recall_score(y_test,prediction)
+    return best_score, recall, best_params
+
+def best_random_forest_class(flight_2016):
+    '''Calculates the best hyperparameters for the RandomForestRegression, then uses those to
+    classify the data
+        Parameters:
+            flight_2016 (Pandas Dataframe): Any data really, but in this case the flight data
+        Returns:
+            best_score (float) best accuracy from the data
+            recall (recall) best recall score from the data 
+            hyperparameters (dictionary) best hyperparameters from the data'''
+    X_train,X_test,y_train,y_test = train_test_data(flight_2016)
+    random_forest_class = RandomForestRegressor()
+    parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
+        'fit_intercept':(True,False), "normalize":(False,True)}
+    gridsearch = GridSearchCV(random_forest_class, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
