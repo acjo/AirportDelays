@@ -112,17 +112,16 @@ def train_test_data(train_size=0.7, binary=True):
     :return X_train, X_test, y_train, y_test:
     '''
     flight_2016, _  = data_cleaning()
-    #get the labels for delay
-    #y = flight_2016['Dep_Delay']
-    #get our predictors
-    #X = flight_2016.drop(['Dep_Delay'], axis=1, inplace=True)
     if binary:
-        mask_on_time = flight_2016['Dep_Delay'] <= 0
-        flight_2016['Dep_Delay'][mask_on_time] = 0
-        flight_2016['Dep_Delay'][~mask_on_time] = 1
-        y = flight_2016['Dep_Delay']
-        X = flight_2016.drop(['Dep_Delay'], axis=1)
+        #create the binary labels for if you were late or not
 
+        mask_on_time = flight_2016['Dep_Delay'] <= 0
+        flight_2016 = flight_2016.assign(Delay=lambda x: flight_2016.Dep_Delay *0)
+        flight_2016['Delay'][mask_on_time] = 0
+        flight_2016['Delay'][~mask_on_time] = 1
+        y = flight_2016['Delay']
+        X = flight_2016.drop(['Dep_Delay', 'Delay'], axis=1)
+        #traint test split on the binary data
         X_train, X_test, y_train, y_test = train_test_split(X,
                                                             y,
                                                             train_size=train_size,
