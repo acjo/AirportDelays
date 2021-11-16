@@ -12,6 +12,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import export_graphviz
 from sklearn.model_selection import GridSearchCV
 #from sklearn.model_selection import recall_score
+import warnings
+warnings.filterwarnings('ignore')
 
 def data_cleaning():
     '''This function cleans the data we will be using
@@ -144,8 +146,29 @@ def train_test_data(train_size=0.7, binary=True):
         mask_900_late = (flight_2016['Dep_Delay'] > 800) & (flight_2016['Dep_Delay'] <=900)
         mask_1000_late = (flight_2016['Dep_Delay'] > 900) & (flight_2016['Dep_Delay'] <=1000)
         mask_1000_or_more_late = flight_2016['Dep_Delay'] > 1000
-        #we need to smote data first
+        flight_2016 = flight_2016.assign(Delay=lambda x: flight_2016.Dep_Delay *0)
 
+        flight_2016['Delay'][mask_on_time.values] = 'on time'
+        flight_2016['Delay'][mask_15_late] = '15 minutes'
+        flight_2016['Delay'][mask_30_late] = '30 minutes'
+        flight_2016['Delay'][mask_45_late] = '45 minutes'
+        flight_2016['Delay'][mask_60_late] = '60 minutes'
+        flight_2016['Delay'][mask_120_late] = '120 minutes'
+        flight_2016['Delay'][mask_180_late] = '180 minutes'
+        flight_2016['Delay'][mask_240_late] = '240 minutes'
+        flight_2016['Delay'][mask_300_late] = '300 minutes'
+        flight_2016['Delay'][mask_400_late] = '400 minutes'
+        flight_2016['Delay'][mask_500_late] = '500 minutes'
+        flight_2016['Delay'][mask_600_late] = '600 minutes'
+        flight_2016['Delay'][mask_700_late] = '700 minutes'
+        flight_2016['Delay'][mask_800_late] = '800 minutes'
+        flight_2016['Delay'][mask_900_late] = '900 minutes'
+        flight_2016['Delay'][mask_1000_late] = '1000 minutes'
+        flight_2016['Delay'][mask_1000_or_more_late] = 'More than 1000 minutes'
+        y = flight_2016['Delay']
+        X = flight_2016.drop(['Dep_Delay', 'Delay'], axis=1)
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=train_size)
 
         pass
 
