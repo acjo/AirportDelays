@@ -6,7 +6,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import ElasticNet
-
+from sklearn.neighbors import KDTree
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import export_graphviz
@@ -126,9 +126,26 @@ def train_test_data(train_size=0.7, binary=True):
                                                             train_size=train_size,
                                                             random_state=42)
     else:
+        #create appropriate masks
         mask_on_time = flight_2016['Dep_Delay'] <=0
-        mask_15_late = flight_2016['Dep_Delay'] < 0 | flight_2016['Dep_Delay'] <=15
+        mask_15_late = (flight_2016['Dep_Delay'] > 0) & (flight_2016['Dep_Delay'] <=15)
+        mask_30_late = (flight_2016['Dep_Delay'] > 15) & (flight_2016['Dep_Delay'] <=30)
+        mask_45_late = (flight_2016['Dep_Delay'] > 30) & (flight_2016['Dep_Delay'] <=45)
+        mask_60_late = (flight_2016['Dep_Delay'] > 45) & (flight_2016['Dep_Delay'] <=60)
+        mask_120_late = (flight_2016['Dep_Delay'] > 60) & (flight_2016['Dep_Delay'] <=120)
+        mask_180_late = (flight_2016['Dep_Delay'] > 120) & (flight_2016['Dep_Delay'] <=180)
+        mask_240_late = (flight_2016['Dep_Delay'] > 180) & (flight_2016['Dep_Delay'] <=240)
+        mask_300_late = (flight_2016['Dep_Delay'] > 240) & (flight_2016['Dep_Delay'] <=300)
+        mask_400_late = (flight_2016['Dep_Delay'] > 300) & (flight_2016['Dep_Delay'] <=400)
+        mask_500_late = (flight_2016['Dep_Delay'] > 400) & (flight_2016['Dep_Delay'] <=500)
+        mask_600_late = (flight_2016['Dep_Delay'] > 500) & (flight_2016['Dep_Delay'] <=600)
+        mask_700_late = (flight_2016['Dep_Delay'] > 600) & (flight_2016['Dep_Delay'] <=700)
+        mask_800_late = (flight_2016['Dep_Delay'] > 700) & (flight_2016['Dep_Delay'] <=800)
+        mask_900_late = (flight_2016['Dep_Delay'] > 800) & (flight_2016['Dep_Delay'] <=900)
+        mask_1000_late = (flight_2016['Dep_Delay'] > 900) & (flight_2016['Dep_Delay'] <=1000)
+        mask_1000_or_more_late = flight_2016['Dep_Delay'] > 1000
         #we need to smote data first
+
 
         pass
 
