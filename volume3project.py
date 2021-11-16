@@ -163,9 +163,9 @@ def best_random_forest_reg(flight_2016):
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(flight_2016)
-    random_forest_regression = RandomForestRegressor()
-    parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
-        'fit_intercept':(True,False), "normalize":(False,True), "n_jobs":(-1)}
+    random_forest_regression = RandomForestRegressor()("squared_error","absolute_error","poisson")
+    parameters = {'n_estimators':(10,50,100,500,1000), 'criterion':("squared_error","absolute_error","poisson"),\
+        'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":(-1)}
     gridsearch = GridSearchCV(random_forest_regression, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -184,8 +184,8 @@ def best_random_forest_class(flight_2016):
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(flight_2016)
-    random_forest_class = RandomForestRegressor()
-    parameters = {'n_estimators':("squared_error","absolute_error","poisson"), 'criterion':("gini", "entropy"),\
+    random_forest_class = RandomForestClassifier()
+    parameters = {'n_estimators':(10,50,100,500,1000), 'criterion':("gini", "entropy"),\
         'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":(-1)}
     gridsearch = GridSearchCV(random_forest_class, parameters)
     gridsearch.fit(X_train, y_train)
@@ -195,6 +195,25 @@ def best_random_forest_class(flight_2016):
     recall = recall_score(y_test,prediction)
     return best_score, recall, best_params
 
+def best_Gaussian(flight_2016):
+    '''Calculates the best hyperparameters for the RandomForestRegression, then uses those to
+    classify the data
+        Parameters:
+            flight_2016 (Pandas Dataframe): Any data really, but in this case the flight data
+        Returns:
+            best_score (float) best accuracy from the data
+            recall (recall) best recall score from the data 
+            hyperparameters (dictionary) best hyperparameters from the data'''
+    X_train,X_test,y_train,y_test = train_test_data(flight_2016)
+    random_forest_class = GaussianNB()
+    parameters = {'var_smoothing': (1e-10,1e-9,1e-8)}
+    gridsearch = GridSearchCV(random_forest_class, parameters)
+    gridsearch.fit(X_train, y_train)
+    prediction = gridsearch.predict(X_test)
+    best_params = gridsearch.best_params_
+    best_score = gridsearch.best_estimator_.score(X_test,y_test)
+    recall = recall_score(y_test,prediction)
+    return best_score, recall, best_params
 #kNN
 #NaiveBayes
 #RandomForrest
