@@ -101,7 +101,8 @@ def best_kNN(flight_2016):
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(flight_2016)
     neighborclassifier = KNeighborsClassifier()
-    parameters = {'n_neighbors':[2,10], 'weights': ('uniform','distance'), 'leaf_size':[20,50], "p":(1,2)}
+    parameters = {'n_neighbors':[2,10], 'weights': ('uniform','distance'), \
+        'leaf_size':[20,50], "p":(1,2), "n_jobs":(-1)}
     gridsearch = GridSearchCV(neighborclassifier, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -122,7 +123,7 @@ def best_logistic(flight_2016):
     X_train,X_test,y_train,y_test = train_test_data(flight_2016)
     logisticregression = LogisticRegression()
     parameters = {'penalty':('l1', 'l2', 'elasticnet', 'none'), 'tol':(1e-6,1e-5,1e-4,1e-3,1e-2),\
-        'C':(.1,.3,.5,.8,1,1.2,1.5,1.8), "fit_intercept":(False,True)}
+        'C':(.1,.3,.5,.8,1,1.2,1.5,1.8), "fit_intercept":(False,True), "n_jobs":(-1)}
     gridsearch = GridSearchCV(logisticregression, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -143,7 +144,7 @@ def best_elastic(flight_2016):
     X_train,X_test,y_train,y_test = train_test_data(flight_2016)
     elastic_regression = ElasticNet()
     parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
-        'fit_intercept':(True,False), "normalize":(False,True)}
+        'fit_intercept':(True,False), "normalize":(False,True), "n_jobs":(-1)}
     gridsearch = GridSearchCV(elastic_regression, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -164,7 +165,7 @@ def best_random_forest_reg(flight_2016):
     X_train,X_test,y_train,y_test = train_test_data(flight_2016)
     random_forest_regression = RandomForestRegressor()
     parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
-        'fit_intercept':(True,False), "normalize":(False,True)}
+        'fit_intercept':(True,False), "normalize":(False,True), "n_jobs":(-1)}
     gridsearch = GridSearchCV(random_forest_regression, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -184,8 +185,8 @@ def best_random_forest_class(flight_2016):
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(flight_2016)
     random_forest_class = RandomForestRegressor()
-    parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
-        'fit_intercept':(True,False), "normalize":(False,True)}
+    parameters = {'n_estimators':("squared_error","absolute_error","poisson"), 'criterion':("gini", "entropy"),\
+        'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":(-1)}
     gridsearch = GridSearchCV(random_forest_class, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
