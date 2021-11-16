@@ -209,7 +209,7 @@ def best_random_forest_reg(flight_2016):
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(flight_2016)
-    random_forest_regression = RandomForestRegressor()("squared_error","absolute_error","poisson")
+    random_forest_regression = RandomForestRegressor()
     parameters = {'n_estimators':(10,50,100,500,1000), 'criterion':("squared_error","absolute_error","poisson"),\
         'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":(-1)}
     gridsearch = GridSearchCV(random_forest_regression, parameters)
