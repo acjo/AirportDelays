@@ -103,6 +103,7 @@ def smote(X,N,k):
             synthetic_samples[i*N+j] = X[i] + (neighbor - X[i])*random_point
 
     return synthetic_samples
+
 def train_test_data(train_size=0.7, binary=True):
     ''' This function takes in the flight data from 2016 and returns a train_test_split of the data
     :param flight_2016: pandas dataframe containing data
@@ -147,23 +148,23 @@ def train_test_data(train_size=0.7, binary=True):
         mask_1000_or_more_late = flight_2016['Dep_Delay'] > 1000
         flight_2016 = flight_2016.assign(Delay=lambda x: flight_2016.Dep_Delay *0)
 
-        flight_2016['Delay'][mask_on_time.values] = 'on time'
-        flight_2016['Delay'][mask_15_late] = '15 minutes'
-        flight_2016['Delay'][mask_30_late] = '30 minutes'
-        flight_2016['Delay'][mask_45_late] = '45 minutes'
-        flight_2016['Delay'][mask_60_late] = '60 minutes'
-        flight_2016['Delay'][mask_120_late] = '120 minutes'
-        flight_2016['Delay'][mask_180_late] = '180 minutes'
-        flight_2016['Delay'][mask_240_late] = '240 minutes'
-        flight_2016['Delay'][mask_300_late] = '300 minutes'
-        flight_2016['Delay'][mask_400_late] = '400 minutes'
-        flight_2016['Delay'][mask_500_late] = '500 minutes'
-        flight_2016['Delay'][mask_600_late] = '600 minutes'
-        flight_2016['Delay'][mask_700_late] = '700 minutes'
-        flight_2016['Delay'][mask_800_late] = '800 minutes'
-        flight_2016['Delay'][mask_900_late] = '900 minutes'
-        flight_2016['Delay'][mask_1000_late] = '1000 minutes'
-        flight_2016['Delay'][mask_1000_or_more_late] = 'More than 1000 minutes'
+        flight_2016['Delay'][mask_on_time] = 0
+        flight_2016['Delay'][mask_15_late] = 15
+        flight_2016['Delay'][mask_30_late] = 30
+        flight_2016['Delay'][mask_45_late] = 40
+        flight_2016['Delay'][mask_60_late] = 60
+        flight_2016['Delay'][mask_120_late] = 120
+        flight_2016['Delay'][mask_180_late] = 180
+        flight_2016['Delay'][mask_240_late] = 240
+        flight_2016['Delay'][mask_300_late] = 300
+        flight_2016['Delay'][mask_400_late] = 400
+        flight_2016['Delay'][mask_500_late] = 500
+        flight_2016['Delay'][mask_600_late] = 600
+        flight_2016['Delay'][mask_700_late] = 700
+        flight_2016['Delay'][mask_800_late] = 800
+        flight_2016['Delay'][mask_900_late] = 900
+        flight_2016['Delay'][mask_1000_late] = 1000
+        flight_2016['Delay'][mask_1000_or_more_late] = 10000
         y = flight_2016['Delay']
         X = flight_2016.drop(['Dep_Delay', 'Delay'], axis=1)
 
