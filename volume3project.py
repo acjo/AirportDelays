@@ -23,7 +23,7 @@ def data_cleaning():
     #drop useless flight data
     flight_2016.drop(['Month', 'Year', 'Day', 'Flight_Date', 'FlightNum',
                       'Departure_Time', 'DepDel15', 'Dep_Delay_Groups',
-                      'Arrival_Time', 'Arrival_Delay', 'Arr_Delay_Minutes',
+                      'Arrival_Time', 'Dep_Delay', 'Arr_Delay_Minutes',
                       'Arr_Del_morethan15', 'Cancelled', 'Diverted',
                       'DistanceGroup', 'UniqueCarrier', 'Carrier_Delay', 'WeatherDelay', 'NAS_Delay',
                       'Security_Delay', 'Late_Aircraft_Delay', 'Top_Carriers', 'Top_Origin',
@@ -32,7 +32,7 @@ def data_cleaning():
     flight_2017 = pd.read_csv('fl_samp.csv', delimiter=',')
     #drop useless flight data
     flight_2017.drop(['Year', 'Month', 'Day', 'Flight_Date', 'UniqueCarrier', 'Departure_Time',
-                      'Scheduled_Arrival', 'Arrival_Delay', 'Arr_Del_morethan15', 'DistanceGroup',
+                      'Scheduled_Arrival', 'Dep_Delay', 'Arr_Del_morethan15', 'DistanceGroup',
                       'Carrier_Delay', 'WeatherDelay', 'NAS_Delay', 'Late_Aircraft_Delay',
                       'DEPTIME_GROUP1', 'DEPTIME_GROUP2', 'DEPTIME_GROUP3' ], axis=1, inplace=True)
 
@@ -46,29 +46,29 @@ def plot_data():
     #plot 2016 histogram
     fig = plt.figure()
     fig.set_dpi(150)
-    plt.hist(flight_2016['Dep_Delay'], color='skyblue', ec='black' )
-    plt.title('Departure delay times from 2016')
+    plt.hist(flight_2016['Arrival_Delay'], color='skyblue', ec='black' )
+    plt.title('Arrival delay times from 2016')
     plt.show()
 
     #plot 2016 histogram with log scale
     fig = plt.figure()
     fig.set_dpi(150)
-    plt.hist(flight_2016['Dep_Delay'], log=True, bins=10, color='skyblue', ec='black' )
-    plt.title('Departure delay times from 2016 log scale')
+    plt.hist(flight_2016['Arrival_Delay'], log=True, bins=10, color='skyblue', ec='black' )
+    plt.title('Arrival delay times from 2016 log scale')
     plt.show()
 
     #plot 2017 histogram
     fig = plt.figure()
     fig.set_dpi(150)
-    plt.hist(flight_2017['Dep_Delay'], color='skyblue', ec='black' )
-    plt.title('Departure delay times from 2017')
+    plt.hist(flight_2017['Arrival_Delay'], color='skyblue', ec='black' )
+    plt.title('Arrival delay times from 2017')
     plt.show()
 
     #plot 2017 histogram with log scale
     fig = plt.figure()
     fig.set_dpi(150)
-    plt.hist(flight_2017['Dep_Delay'], log=True, bins=10, color='skyblue', ec='black' )
-    plt.title('Departure delay times from 2017 log scale')
+    plt.hist(flight_2017['Arrival_Delay'], log=True, bins=10, color='skyblue', ec='black' )
+    plt.title('Arrival delay times from 2017 log scale')
     plt.show()
 
     return
@@ -90,7 +90,7 @@ def smote(X,N,k):
     tree = KDTree(X)
     for i in range(m):
         #get k nearest neighbors for the current row
-        dist, indices = tree.query(X[i:i+1], k=k)
+        _, indices = tree.query(X[i:i+1], k=k)
         #now we have to create our new samples
         for j in range(N):
             #random choice of the nearest neighbors
@@ -102,7 +102,7 @@ def smote(X,N,k):
 
     return synthetic_samples
 
-def train_test_data(train_size=0.7, binary=True):
+def train_test_data(train_size=0.7, binary=True, smote_data=True):
     ''' This function takes in the flight data from 2016 and returns a train_test_split of the data
     :param flight_2016: pandas dataframe containing data
     :param train_size: the amount of data to test on defualts to a 70-30 train test split
@@ -119,8 +119,8 @@ def train_test_data(train_size=0.7, binary=True):
     if binary:
         #create the binary labels for if you were late or not
 
-        mask_on_time = flight_2016['Dep_Delay'] <= 0
-        flight_2016 = flight_2016.assign(Delay=lambda x: flight_2016.Dep_Delay *0)
+        mask_on_time = flight_2016['Arrival_Delay'] <= 0
+        flight_2016 = flight_2016.assign(Delay=lambda x: flight_2016.Arrival_Delay *0)
         flight_2016['Delay'][mask_on_time] = 0
         flight_2016['Delay'][~mask_on_time] = 1
         y = flight_2016['Delay']
@@ -132,24 +132,33 @@ def train_test_data(train_size=0.7, binary=True):
                                                             random_state=42)
     else:
         #create appropriate masks
-        mask_on_time = flight_2016['Dep_Delay'] <=0
-        mask_15_late = (flight_2016['Dep_Delay'] > 0) & (flight_2016['Dep_Delay'] <=15)
-        mask_30_late = (flight_2016['Dep_Delay'] > 15) & (flight_2016['Dep_Delay'] <=30)
-        mask_45_late = (flight_2016['Dep_Delay'] > 30) & (flight_2016['Dep_Delay'] <=45)
-        mask_60_late = (flight_2016['Dep_Delay'] > 45) & (flight_2016['Dep_Delay'] <=60)
-        mask_120_late = (flight_2016['Dep_Delay'] > 60) & (flight_2016['Dep_Delay'] <=120)
-        mask_180_late = (flight_2016['Dep_Delay'] > 120) & (flight_2016['Dep_Delay'] <=180)
-        mask_240_late = (flight_2016['Dep_Delay'] > 180) & (flight_2016['Dep_Delay'] <=240)
-        mask_300_late = (flight_2016['Dep_Delay'] > 240) & (flight_2016['Dep_Delay'] <=300)
-        mask_400_late = (flight_2016['Dep_Delay'] > 300) & (flight_2016['Dep_Delay'] <=400)
-        mask_500_late = (flight_2016['Dep_Delay'] > 400) & (flight_2016['Dep_Delay'] <=500)
-        mask_600_late = (flight_2016['Dep_Delay'] > 500) & (flight_2016['Dep_Delay'] <=600)
-        mask_700_late = (flight_2016['Dep_Delay'] > 600) & (flight_2016['Dep_Delay'] <=700)
-        mask_800_late = (flight_2016['Dep_Delay'] > 700) & (flight_2016['Dep_Delay'] <=800)
-        mask_900_late = (flight_2016['Dep_Delay'] > 800) & (flight_2016['Dep_Delay'] <=900)
-        mask_1000_late = (flight_2016['Dep_Delay'] > 900) & (flight_2016['Dep_Delay'] <=1000)
-        mask_1000_or_more_late = flight_2016['Dep_Delay'] > 1000
-        flight_2016 = flight_2016.assign(Delay=lambda x: flight_2016.Dep_Delay *0)
+        mask_on_time = flight_2016['Arrival_Delay'] <=0
+        mask_15_late = (flight_2016['Arrival_Delay'] > 0) & (flight_2016['Arrival_Delay'] <=15)
+        mask_30_late = (flight_2016['Arrival_Delay'] > 15) & (flight_2016['Arrival_Delay'] <=30)
+        mask_45_late = (flight_2016['Arrival_Delay'] > 30) & (flight_2016['Arrival_Delay'] <=45)
+        mask_60_late = (flight_2016['Arrival_Delay'] > 45) & (flight_2016['Arrival_Delay'] <=60)
+        mask_120_late = (flight_2016['Arrival_Delay'] > 60) & (flight_2016['Arrival_Delay'] <=120)
+        mask_180_late = (flight_2016['Arrival_Delay'] > 120) & (flight_2016['Arrival_Delay'] <=180)
+        mask_240_late = (flight_2016['Arrival_Delay'] > 180) & (flight_2016['Arrival_Delay'] <=240)
+        mask_300_late = (flight_2016['Arrival_Delay'] > 240) & (flight_2016['Arrival_Delay'] <=300)
+        mask_400_late = (flight_2016['Arrival_Delay'] > 300) & (flight_2016['Arrival_Delay'] <=400)
+        mask_500_late = (flight_2016['Arrival_Delay'] > 400) & (flight_2016['Arrival_Delay'] <=500)
+        mask_600_late = (flight_2016['Arrival_Delay'] > 500) & (flight_2016['Arrival_Delay'] <=600)
+        mask_700_late = (flight_2016['Arrival_Delay'] > 600) & (flight_2016['Arrival_Delay'] <=700)
+        mask_800_late = (flight_2016['Arrival_Delay'] > 700) & (flight_2016['Arrival_Delay'] <=800)
+        mask_900_late = (flight_2016['Arrival_Delay'] > 800) & (flight_2016['Arrival_Delay'] <=900)
+        mask_1000_late = (flight_2016['Arrival_Delay'] > 900) & (flight_2016['Arrival_Delay'] <=1000)
+        mask_1000_or_more_late = flight_2016['Arrival_Delay'] > 1000
+        flight_2016 = flight_2016.assign(Delay=lambda x: flight_2016.Arrival_Delay *0)
+
+        '''
+        masks = [ mask_on_time, mask_15_late, mask_30_late, mask_45_late, mask_60_late, mask_120_late,
+                  mask_180_late, mask_240_late, mask_300_late, mask_400_late, mask_500_late, mask_600_late,
+                  mask_700_late, mask_800_late, mask_900_late, mask_1000_late, mask_1000_or_more_late]
+        times = [0, 15, 30, 40, 60, 120, 180, 240, 300, 400, 500, 600, 700, 800, 900, 1000, 10000]
+        for time, mask in zip(times, masks):
+            print(time, sum(mask.values))
+        '''
 
         flight_2016['Delay'][mask_on_time] = 0
         flight_2016['Delay'][mask_15_late] = 15
@@ -169,11 +178,18 @@ def train_test_data(train_size=0.7, binary=True):
         flight_2016['Delay'][mask_1000_late] = 1000
         flight_2016['Delay'][mask_1000_or_more_late] = 10000
         y = flight_2016['Delay']
-        X = flight_2016.drop(['Dep_Delay', 'Delay'], axis=1)
+        X = flight_2016.drop(['Arrival_Delay', 'Delay'], axis=1)
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=train_size)
 
-        pass
+        if smote_data:
+            #pass
+            #add additonal data via SMOTE for everything greater than 240 minutes late
+            mask_240 = y_train == 240
+            smote_240 = X_train[mask_240]
+            additional_smote = smote(smote_240, 26, 2)
+            print(additional_smote.size)
+
 
     return X_train, X_test, y_train, y_test
 
@@ -186,7 +202,7 @@ def best_kNN(binary):
             binary (binary): Use the late binary or not
         Returns:
             best_score (float) best accuracy from the data
-            recall (recall) best recall score from the data 
+            recall (recall) best recall score from the data
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     neighborclassifier = KNeighborsClassifier()
@@ -207,7 +223,7 @@ def best_logistic(binary):
             binary (binary): Use the late binary or not
         Returns:
             best_score (float) best accuracy from the data
-            recall (recall) best recall score from the data 
+            recall (recall) best recall score from the data
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     logisticregression = LogisticRegression()
@@ -228,7 +244,7 @@ def best_elastic(binary):
             binary (binary): Use the late binary or not
         Returns:
             best_score (float) best accuracy from the data
-            recall (recall) best recall score from the data 
+            recall (recall) best recall score from the data
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     elastic_regression = ElasticNet()
@@ -249,7 +265,7 @@ def best_random_forest_reg(binary):
             binary (binary): Use the late binary or not
         Returns:
             best_score (float) best accuracy from the data
-            recall (recall) best recall score from the data 
+            recall (recall) best recall score from the data
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     random_forest_regression = RandomForestRegressor()
@@ -270,7 +286,7 @@ def best_random_forest_class(binary):
             binary (binary): Use the late binary or not
         Returns:
             best_score (float) best accuracy from the data
-            recall (recall) best recall score from the data 
+            recall (recall) best recall score from the data
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     random_forest_class = RandomForestClassifier()
@@ -291,7 +307,7 @@ def best_Gaussian(binary):
             binary (binary): Use the late binary or not
         Returns:
             best_score (float) best accuracy from the data
-            recall (recall) best recall score from the data 
+            recall (recall) best recall score from the data
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     random_forest_class = GaussianNB()
@@ -311,11 +327,14 @@ def best_Gaussian(binary):
 #
 
 if __name__ == "__main__":
-    pass
+    #plot_data()
     #flight_2016, flight_2017 = data_cleaning()
     #print(pd.unique(flight_2016['Dep_Delay']))
     #print(flight_2016['Dep_Delay'].value_counts())
-    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
+    #X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
+    #X_test.iloc[[0, 3]]
+    '''
+    
     print("Binary")
     print("KNN")
     print(best_kNN(True))
@@ -336,3 +355,4 @@ if __name__ == "__main__":
     print(best_elastic(False))
     print("Gaussian")
     print(best_Gaussian(False))
+    '''
