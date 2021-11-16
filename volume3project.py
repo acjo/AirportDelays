@@ -11,7 +11,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import export_graphviz
 from sklearn.model_selection import GridSearchCV
-#from sklearn.model_selection import recall_score
+from sklearn.metrics import recall_score
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -187,7 +187,7 @@ def best_kNN(binary):
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     neighborclassifier = KNeighborsClassifier()
     parameters = {'n_neighbors':[2,10], 'weights': ('uniform','distance'), \
-        'leaf_size':[20,50], "p":(1,2), "n_jobs":(-1)}
+        'leaf_size':[20,50], "p":(1,2), "n_jobs":[-1]}
     gridsearch = GridSearchCV(neighborclassifier, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -271,7 +271,7 @@ def best_random_forest_class(binary):
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     random_forest_class = RandomForestClassifier()
     parameters = {'n_estimators':(10,50,100,500,1000), 'criterion':("gini", "entropy"),\
-        'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":(-1)}
+        'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":[-1]}
     gridsearch = GridSearchCV(random_forest_class, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -312,3 +312,9 @@ if __name__ == "__main__":
     #print(pd.unique(flight_2016['Dep_Delay']))
     #print(flight_2016['Dep_Delay'].value_counts())
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
+    print(best_kNN(True))
+    print(best_kNN(False))
+    # print(best_logistic(True))
+    # print(best_random_forest_class(False))
+    # print(best_elastic(False))
+    # print(best_Gaussian(True))
