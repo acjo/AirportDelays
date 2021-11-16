@@ -7,13 +7,11 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import ElasticNet
 from sklearn.neighbors import KDTree
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.tree import export_graphviz
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import recall_score
 import warnings
 warnings.filterwarnings('ignore')
+#from sklearn.tree import export_graphviz
 
 def data_cleaning():
     '''This function cleans the data we will be using
