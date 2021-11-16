@@ -8,6 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import ElasticNet
 
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import export_graphviz
 from sklearn.model_selection import GridSearchCV
 #from sklearn.model_selection import recall_score
