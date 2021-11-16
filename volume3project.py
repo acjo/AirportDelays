@@ -192,8 +192,8 @@ def best_kNN(binary):
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     neighborclassifier = KNeighborsClassifier()
-    parameters = {'n_neighbors':[2,10], 'weights': ('uniform','distance'), \
-        'leaf_size':[20,50], "p":(1,2), "n_jobs":[-1]}
+    parameters = {'n_neighbors':[2], 'weights': ('uniform','distance'), \
+        'leaf_size':(20,30,40,50), "p":(1,2), "n_jobs":[-1]}
     gridsearch = GridSearchCV(neighborclassifier, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -214,7 +214,7 @@ def best_logistic(binary):
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     logisticregression = LogisticRegression()
     parameters = {'penalty':('l1', 'l2', 'elasticnet', 'none'), 'tol':(1e-6,1e-5,1e-4,1e-3,1e-2),\
-        'C':(.1,.3,.5,.8,1,1.2,1.5,1.8), "fit_intercept":(False,True), "n_jobs":(-1)}
+        'C':(.1,.3,.5,.8,1,1.2,1.5,1.8), "fit_intercept":(False,True), "n_jobs":[-1]}
     gridsearch = GridSearchCV(logisticregression, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -235,7 +235,7 @@ def best_elastic(binary):
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     elastic_regression = ElasticNet()
     parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
-        'fit_intercept':(True,False), "normalize":(False,True), "n_jobs":(-1)}
+        'fit_intercept':(True,False), "normalize":(False,True), "n_jobs":[-1]}
     gridsearch = GridSearchCV(elastic_regression, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -256,7 +256,7 @@ def best_random_forest_reg(binary):
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     random_forest_regression = RandomForestRegressor()
     parameters = {'n_estimators':(10,50,100,500,1000), 'criterion':("squared_error","absolute_error","poisson"),\
-        'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":(-1)}
+        'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":[-1]}
     gridsearch = GridSearchCV(random_forest_regression, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -320,11 +320,11 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
     print("Binary")
     print("KNN")
-    print(best_kNN(True))
+    # print(best_kNN(True))
     print("Logistic")
-    print(best_logistic(True))
+    # print(best_logistic(True))
     print("Random Forest Classifer")
-    print(best_random_forest_class(True))
+    # print(best_random_forest_class(True))
     print("Elastic")
     print(best_elastic(True))
     print(best_Gaussian(True))
