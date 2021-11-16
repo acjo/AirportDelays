@@ -176,7 +176,7 @@ def train_test_data(train_size=0.7, binary=True):
 
 
 
-def best_kNN(flight_2016):
+def best_kNN(binary):
     '''Calculates the best hyperparameters for the KNeightborsClassifier, then uses those to
     classify the data
         Parameters:
@@ -185,7 +185,7 @@ def best_kNN(flight_2016):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
-    X_train,X_test,y_train,y_test = train_test_data(flight_2016)
+    X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     neighborclassifier = KNeighborsClassifier()
     parameters = {'n_neighbors':[2,10], 'weights': ('uniform','distance'), \
         'leaf_size':[20,50], "p":(1,2), "n_jobs":(-1)}
@@ -197,7 +197,7 @@ def best_kNN(flight_2016):
     recall = recall_score(y_test,prediction)
     return best_score, recall, best_params
 
-def best_logistic(flight_2016):
+def best_logistic(binary):
     '''Calculates the best hyperparameters for the LogisticRegression, then uses those to
     classify the data
         Parameters:
@@ -206,7 +206,7 @@ def best_logistic(flight_2016):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
-    X_train,X_test,y_train,y_test = train_test_data(flight_2016)
+    X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     logisticregression = LogisticRegression()
     parameters = {'penalty':('l1', 'l2', 'elasticnet', 'none'), 'tol':(1e-6,1e-5,1e-4,1e-3,1e-2),\
         'C':(.1,.3,.5,.8,1,1.2,1.5,1.8), "fit_intercept":(False,True), "n_jobs":(-1)}
@@ -218,7 +218,7 @@ def best_logistic(flight_2016):
     recall = recall_score(y_test,prediction)
     return best_score, recall, best_params
 
-def best_elastic(flight_2016):
+def best_elastic(binary):
     '''Calculates the best hyperparameters for the ElasticRegression, then uses those to
     predict the data
         Parameters:
@@ -227,7 +227,7 @@ def best_elastic(flight_2016):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
-    X_train,X_test,y_train,y_test = train_test_data(flight_2016)
+    X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     elastic_regression = ElasticNet()
     parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
         'fit_intercept':(True,False), "normalize":(False,True), "n_jobs":(-1)}
@@ -239,7 +239,7 @@ def best_elastic(flight_2016):
     recall = recall_score(y_test,prediction)
     return best_score, recall, best_params
 
-def best_random_forest_reg(flight_2016):
+def best_random_forest_reg(binary):
     '''Calculates the best hyperparameters for the RandomForestRegression, then uses those to
     predict the data
         Parameters:
@@ -248,7 +248,7 @@ def best_random_forest_reg(flight_2016):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
-    X_train,X_test,y_train,y_test = train_test_data(flight_2016)
+    X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     random_forest_regression = RandomForestRegressor()
     parameters = {'n_estimators':(10,50,100,500,1000), 'criterion':("squared_error","absolute_error","poisson"),\
         'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":(-1)}
@@ -260,7 +260,7 @@ def best_random_forest_reg(flight_2016):
     recall = recall_score(y_test,prediction)
     return best_score, recall, best_params
 
-def best_random_forest_class(flight_2016):
+def best_random_forest_class(binary):
     '''Calculates the best hyperparameters for the RandomForestRegression, then uses those to
     classify the data
         Parameters:
@@ -269,7 +269,7 @@ def best_random_forest_class(flight_2016):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
-    X_train,X_test,y_train,y_test = train_test_data(flight_2016)
+    X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     random_forest_class = RandomForestClassifier()
     parameters = {'n_estimators':(10,50,100,500,1000), 'criterion':("gini", "entropy"),\
         'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":(-1)}
@@ -281,7 +281,7 @@ def best_random_forest_class(flight_2016):
     recall = recall_score(y_test,prediction)
     return best_score, recall, best_params
 
-def best_Gaussian(flight_2016):
+def best_Gaussian(binary):
     '''Calculates the best hyperparameters for the RandomForestRegression, then uses those to
     classify the data
         Parameters:
@@ -290,7 +290,7 @@ def best_Gaussian(flight_2016):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
-    X_train,X_test,y_train,y_test = train_test_data(flight_2016)
+    X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     random_forest_class = GaussianNB()
     parameters = {'var_smoothing': (1e-10,1e-9,1e-8)}
     gridsearch = GridSearchCV(random_forest_class, parameters)
@@ -306,6 +306,7 @@ def best_Gaussian(flight_2016):
 #LogisticRegression
 #OLS
 #
+
 if __name__ == "__main__":
     pass
     #flight_2016, flight_2017 = data_cleaning()
