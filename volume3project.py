@@ -6,6 +6,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import ElasticNet
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KDTree
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import recall_score
@@ -190,7 +191,7 @@ def best_kNN(binary):
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     neighborclassifier = KNeighborsClassifier()
-    parameters = {'n_neighbors':[2], 'weights': ('uniform','distance'), \
+    parameters = {'n_neighbors':[2,4], 'weights': ('uniform','distance'), \
         'leaf_size':(20,30,40,50), "p":(1,2), "n_jobs":[-1]}
     gridsearch = GridSearchCV(neighborclassifier, parameters)
     gridsearch.fit(X_train, y_train)
@@ -233,7 +234,7 @@ def best_elastic(binary):
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     elastic_regression = ElasticNet()
     parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
-        'fit_intercept':(True,False), "normalize":(False,True), "n_jobs":[-1]}
+        'fit_intercept':(True,False), "normalize":(False,True)}
     gridsearch = GridSearchCV(elastic_regression, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -322,7 +323,7 @@ if __name__ == "__main__":
     print("Logistic")
     # print(best_logistic(True))
     print("Random Forest Classifer")
-    # print(best_random_forest_class(True))
+    print(best_random_forest_class(True))
     print("Elastic")
     print(best_elastic(True))
     print(best_Gaussian(True))
