@@ -282,7 +282,7 @@ def train_test_data(train_size=0.7, binary=False, smote_data=True):
 
 
 
-def best_kNN(binary):
+def best_kNN(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for the KNeightborsClassifier, then uses those to
     classify the data
         Parameters:
@@ -291,7 +291,7 @@ def best_kNN(binary):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
-    X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
+
     neighborclassifier = KNeighborsClassifier()
     parameters = {'n_neighbors':[2,4], 'weights': ('uniform','distance'), \
         'leaf_size':(20,30,40,50), "p":(1,2), "n_jobs":[-1]}
@@ -306,7 +306,7 @@ def best_kNN(binary):
     else:
         return best_score, best_params
 
-def best_logistic(binary):
+def best_logistic(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for the LogisticRegression, then uses those to
     classify the data
         Parameters:
@@ -315,7 +315,7 @@ def best_logistic(binary):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
-    X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
+
     logisticregression = LogisticRegression()
     parameters = {'penalty':('l1', 'l2', 'elasticnet', 'none'), 'tol':[1e-3],\
         'C':(.1,.3,.5,.8,1,1.2,1.5,1.8), "fit_intercept":(False,True), "n_jobs":[-1], 'max_iter':[400]}
@@ -330,7 +330,7 @@ def best_logistic(binary):
     else:
         return best_score, best_params
 
-def best_elastic(binary):
+def best_elastic(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for ElasticRegression, then uses those to
     predict the data
         Parameters:
@@ -339,7 +339,7 @@ def best_elastic(binary):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
-    X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
+
     elastic_regression = ElasticNet()
     parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
         'fit_intercept':(True,False), "normalize":(False,True)}
@@ -354,7 +354,7 @@ def best_elastic(binary):
     else:
         return best_score, best_params
 
-def best_random_forest_reg(binary):
+def best_random_forest_reg(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for RandomForestRegression, then uses those to
     predict the data
         Parameters:
@@ -363,7 +363,6 @@ def best_random_forest_reg(binary):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
-    X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     random_forest_regression = RandomForestClassifier()
     parameters = {'n_estimators':[100], 'criterion':("squared_error","absolute_error","poisson"),\
         'max_depth':(5,10,15,20), 'bootstrap':(True,False), "n_jobs":[-1]}
@@ -378,7 +377,7 @@ def best_random_forest_reg(binary):
     else:
         return best_score, best_params
 
-def best_random_forest_class(binary):
+def best_random_forest_class(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for the RandomForestClassifier, then uses those to
     classify the data
         Parameters:
@@ -387,7 +386,7 @@ def best_random_forest_class(binary):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
-    X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
+
     random_forest_class = RandomForestClassifier()
     parameters = {'n_estimators':[100], 'criterion':("gini", "entropy"),\
         'max_depth':(5,10,15,20), 'bootstrap':(True,False), "n_jobs":[-1]}
@@ -402,7 +401,7 @@ def best_random_forest_class(binary):
     else:
         return best_score, best_params
 
-def best_Gaussian(binary):
+def best_Gaussian(X_train, X_test, y_train, y_test, binary):
     '''Calculates the best hyperparameters for the GaussianNB, then uses those to
     classify the data
         Parameters:
@@ -411,7 +410,6 @@ def best_Gaussian(binary):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
-    X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     random_forest_class = GaussianNB()
     parameters = {'var_smoothing': (1e-10,1e-9,1e-8)}
     gridsearch = GridSearchCV(random_forest_class, parameters)
@@ -437,29 +435,31 @@ if __name__ == "__main__":
     #print(pd.unique(flight_2016['Dep_Delay']))
     #print(flight_2016['Dep_Delay'].value_counts())
 
-    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=True)
-
+    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=True, smote_data=False)
+    binary = True
     print("Binary")
     print("KNN")
-    print(best_kNN(True))
+    print(best_kNN(X_train, X_test, y_train, y_test,binary))
     print("Logistic")
-    print(best_logistic(True))
+    print(best_logistic(X_train, X_test, y_train, y_test,binary))
     print("Random Forest Classifer")
-    print(best_random_forest_class(True))
+    print(best_random_forest_class(X_train, X_test, y_train, y_test,binary))
     # print("Elastic")
     # print(best_elastic(True))
     print("Gaussian")
-    print(best_Gaussian(True))
+    print(best_Gaussian(X_train, X_test, y_train, y_test,binary))
 
+    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=True)
+    binary = False
     print("Not Binary")
     print("KNN")
-    print(best_kNN(False))
+    print(best_kNN(X_train, X_test, y_train, y_test,binary))
     print("Random Forest Classifer")
-    print(best_random_forest_class(False))
+    print(best_random_forest_class(X_train, X_test, y_train, y_test,binary))
     # print("Elastic")
     # print(best_elastic(False))
     print("Gaussian")
-    print(best_Gaussian(False))
+    print(best_Gaussian(X_train, X_test, y_train, y_test,binary))
 
     # X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
     # smitten = smote(X_train[y_train==400].to_numpy(),2,2)
