@@ -226,7 +226,7 @@ def best_kNN(binary):
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
     best_score = gridsearch.best_estimator_.score(X_test,y_test)
-    recall = recall_score(y_test,prediction)
+    recall = recall_score(y_test,prediction, average='weighted')
     return best_score, recall, best_params
 
 def best_logistic(binary):
@@ -240,14 +240,14 @@ def best_logistic(binary):
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     logisticregression = LogisticRegression()
-    parameters = {'penalty':('l1', 'l2', 'elasticnet', 'none'), 'tol':(1e-6,1e-5,1e-4,1e-3,1e-2),\
-        'C':(.1,.3,.5,.8,1,1.2,1.5,1.8), "fit_intercept":(False,True), "n_jobs":[-1]}
+    parameters = {'penalty':('l1', 'l2', 'elasticnet', 'none'), 'tol':[1e-3],\
+        'C':(.1,.3,.5,.8,1,1.2,1.5,1.8), "fit_intercept":(False,True), "n_jobs":[-1], 'max_iter':[400]}
     gridsearch = GridSearchCV(logisticregression, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
     best_score = gridsearch.best_estimator_.score(X_test,y_test)
-    recall = recall_score(y_test,prediction)
+    recall = recall_score(y_test,prediction, average='weighted')
     return best_score, recall, best_params
 
 def best_elastic(binary):
@@ -268,7 +268,7 @@ def best_elastic(binary):
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
     best_score = gridsearch.best_estimator_.score(X_test,y_test)
-    recall = recall_score(y_test,prediction)
+    recall = recall_score(y_test,prediction, average='weighted')
     return best_score, recall, best_params
 
 def best_random_forest_reg(binary):
@@ -289,7 +289,7 @@ def best_random_forest_reg(binary):
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
     best_score = gridsearch.best_estimator_.score(X_test,y_test)
-    recall = recall_score(y_test,prediction)
+    recall = recall_score(y_test,prediction, average='weighted')
     return best_score, recall, best_params
 
 def best_random_forest_class(binary):
@@ -310,7 +310,7 @@ def best_random_forest_class(binary):
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
     best_score = gridsearch.best_estimator_.score(X_test,y_test)
-    recall = recall_score(y_test,prediction)
+    recall = recall_score(y_test,prediction, average='weighted')
     return best_score, recall, best_params
 
 def best_Gaussian(binary):
@@ -330,7 +330,7 @@ def best_Gaussian(binary):
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
     best_score = gridsearch.best_estimator_.score(X_test,y_test)
-    recall = recall_score(y_test,prediction)
+    recall = recall_score(y_test,prediction, average='weighted')
     return best_score, recall, best_params
 #kNN
 #NaiveBayes
@@ -346,27 +346,28 @@ if __name__ == "__main__":
     #print(flight_2016['Dep_Delay'].value_counts())
 
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
-    # print("Binary")
-    # print("KNN")
-    # print(best_kNN(True))
-    # print("Logistic")
-    # print(best_logistic(True))
-    # print("Random Forest Classifer")
-    # print(best_random_forest_class(True))
+    print("Binary")
+    print("KNN")
+    print(best_kNN(True))
+    print("Logistic")
+    print(best_logistic(True))
+    print("Random Forest Classifer")
+    print(best_random_forest_class(True))
     # print("Elastic")
     # print(best_elastic(True))
-    # print(best_Gaussian(True))
+    print("Gaussian")
+    print(best_Gaussian(True))
 
-    # print("Not Binary")
-    # print("KNN")
-    # print(best_kNN(False))
-    # print("Random Forest Classifer")
-    # print(best_random_forest_class(False))
+    print("Not Binary")
+    print("KNN")
+    print(best_kNN(False))
+    print("Random Forest Classifer")
+    print(best_random_forest_class(False))
     # print("Elastic")
     # print(best_elastic(False))
-    # print("Gaussian")
-    # print(best_Gaussian(False))
+    print("Gaussian")
+    print(best_Gaussian(False))
 
-    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
-    smitten = smote(X_train[y_train==400].to_numpy(),2,2)
-    print(smitten)
+    # X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
+    # smitten = smote(X_train[y_train==400].to_numpy(),2,2)
+    # print(smitten)
