@@ -226,8 +226,11 @@ def best_kNN(binary):
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
     best_score = gridsearch.best_estimator_.score(X_test,y_test)
-    recall = recall_score(y_test,prediction, average='weighted')
-    return best_score, recall, best_params
+    if binary == True:
+        recall = recall_score(y_test,prediction)
+        return best_score, recall, best_params
+    else:
+        return best_score, best_params
 
 def best_logistic(binary):
     '''Calculates the best hyperparameters for the LogisticRegression, then uses those to
@@ -247,8 +250,11 @@ def best_logistic(binary):
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
     best_score = gridsearch.best_estimator_.score(X_test,y_test)
-    recall = recall_score(y_test,prediction, average='weighted')
-    return best_score, recall, best_params
+    if binary == True:
+        recall = recall_score(y_test,prediction)
+        return best_score, recall, best_params
+    else:
+        return best_score, best_params
 
 def best_elastic(binary):
     '''Calculates the best hyperparameters for ElasticRegression, then uses those to
@@ -268,8 +274,11 @@ def best_elastic(binary):
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
     best_score = gridsearch.best_estimator_.score(X_test,y_test)
-    recall = recall_score(y_test,prediction, average='weighted')
-    return best_score, recall, best_params
+    if binary == True:
+        recall = recall_score(y_test,prediction)
+        return best_score, recall, best_params
+    else:
+        return best_score, best_params
 
 def best_random_forest_reg(binary):
     '''Calculates the best hyperparameters for RandomForestRegression, then uses those to
@@ -289,8 +298,11 @@ def best_random_forest_reg(binary):
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
     best_score = gridsearch.best_estimator_.score(X_test,y_test)
-    recall = recall_score(y_test,prediction, average='weighted')
-    return best_score, recall, best_params
+    if binary == True:
+        recall = recall_score(y_test,prediction)
+        return best_score, recall, best_params
+    else:
+        return best_score, best_params
 
 def best_random_forest_class(binary):
     '''Calculates the best hyperparameters for the RandomForestClassifier, then uses those to
@@ -310,8 +322,11 @@ def best_random_forest_class(binary):
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
     best_score = gridsearch.best_estimator_.score(X_test,y_test)
-    recall = recall_score(y_test,prediction, average='weighted')
-    return best_score, recall, best_params
+    if binary == True:
+        recall = recall_score(y_test,prediction)
+        return best_score, recall, best_params
+    else:
+        return best_score, best_params
 
 def best_Gaussian(binary):
     '''Calculates the best hyperparameters for the GaussianNB, then uses those to
@@ -330,8 +345,11 @@ def best_Gaussian(binary):
     prediction = gridsearch.predict(X_test)
     best_params = gridsearch.best_params_
     best_score = gridsearch.best_estimator_.score(X_test,y_test)
-    recall = recall_score(y_test,prediction, average='weighted')
-    return best_score, recall, best_params
+    if binary == True:
+        recall = recall_score(y_test,prediction)
+        return best_score, recall, best_params
+    else:
+        return best_score, best_params
 #kNN
 #NaiveBayes
 #RandomForrest
