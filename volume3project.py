@@ -304,7 +304,8 @@ def best_kNN(X_train, X_test, y_train, y_test,binary):
         recall = recall_score(y_test,prediction)
         return best_score, recall, best_params
     else:
-        return best_score, best_params
+        recall = recall_score(y_test,prediction, average='macro')
+        return best_score, recall, best_params
 
 def best_logistic(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for the LogisticRegression, then uses those to
@@ -328,7 +329,8 @@ def best_logistic(X_train, X_test, y_train, y_test,binary):
         recall = recall_score(y_test,prediction)
         return best_score, recall, best_params
     else:
-        return best_score, best_params
+        recall = recall_score(y_test,prediction, average='macro')
+        return best_score, recall, best_params
 
 def best_elastic(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for ElasticRegression, then uses those to
@@ -352,7 +354,8 @@ def best_elastic(X_train, X_test, y_train, y_test,binary):
         recall = recall_score(y_test,prediction)
         return best_score, recall, best_params
     else:
-        return best_score, best_params
+        recall = recall_score(y_test,prediction, average='macro')
+        return best_score, recall, best_params
 
 def best_random_forest_reg(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for RandomForestRegression, then uses those to
@@ -375,7 +378,8 @@ def best_random_forest_reg(X_train, X_test, y_train, y_test,binary):
         recall = recall_score(y_test,prediction)
         return best_score, recall, best_params
     else:
-        return best_score, best_params
+        recall = recall_score(y_test,prediction, average='macro')
+        return best_score, recall, best_params
 
 def best_random_forest_class(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for the RandomForestClassifier, then uses those to
@@ -399,7 +403,8 @@ def best_random_forest_class(X_train, X_test, y_train, y_test,binary):
         recall = recall_score(y_test,prediction)
         return best_score, recall, best_params
     else:
-        return best_score, best_params
+        recall = recall_score(y_test,prediction, average='macro')
+        return best_score, recall, best_params
 
 def best_Gaussian(X_train, X_test, y_train, y_test, binary):
     '''Calculates the best hyperparameters for the GaussianNB, then uses those to
@@ -421,7 +426,8 @@ def best_Gaussian(X_train, X_test, y_train, y_test, binary):
         recall = recall_score(y_test,prediction)
         return best_score, recall, best_params
     else:
-        return best_score, best_params
+        recall = recall_score(y_test,prediction, average='macro')
+        return best_score, recall, best_params
 #kNN
 #NaiveBayes
 #RandomForrest
@@ -449,7 +455,7 @@ if __name__ == "__main__":
     print("Gaussian")
     print(best_Gaussian(X_train, X_test, y_train, y_test,binary))
 
-    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=True)
+    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=False)
     binary = False
     print("Not Binary")
     print("KNN")
@@ -464,3 +470,47 @@ if __name__ == "__main__":
     # X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
     # smitten = smote(X_train[y_train==400].to_numpy(),2,2)
     # print(smitten)
+
+
+'''
+SMOTE on the second
+
+Binary
+KNN
+(0.5874222529371113, 0.3783783783783784, {'leaf_size': 50, 'n_jobs': -1, 'n_neighbors': 4, 'p': 2, 'weights': 'uniform'})
+Logistic
+(0.6413268832066344, 0.6187766714082503, {'C': 0.1, 'fit_intercept': True, 'max_iter': 400, 'n_jobs': -1, 'penalty': 'none', 'tol': 
+0.001})
+Random Forest Classifer
+(0.6447823082239116, 0.6642958748221907, {'bootstrap': False, 'criterion': 'entropy', 'max_depth': 5, 'n_estimators': 100, 'n_jobs': -1})
+Gaussian
+(0.5846579129232896, 0.8662873399715505, {'var_smoothing': 1e-08})
+Not Binary
+KNN
+(0.44782308223911543, 0.07717442504128881, {'leaf_size': 20, 'n_jobs': -1, 'n_neighbors': 4, 'p': 1, 'weights': 'uniform'})
+Random Forest Classifer
+(0.49827228749136143, 0.07839402288890197, {'bootstrap': True, 'criterion': 'entropy', 'max_depth': 10, 'n_estimators': 100, 'n_jobs': -1})
+Gaussian
+(0.0414651002073255, 0.050060138994526715, {'var_smoothing': 1e-08})
+
+
+No SMOTE at all
+Binary
+KNN
+(0.5874222529371113, 0.3783783783783784, {'leaf_size': 50, 'n_jobs': -1, 'n_neighbors': 4, 'p': 2, 'weights': 'uniform'})
+Logistic
+(0.6413268832066344, 0.6187766714082503, {'C': 0.1, 'fit_intercept': True, 'max_iter': 400, 'n_jobs': -1, 'penalty': 'none', 'tol': 
+0.001})
+Random Forest Classifer
+(0.6558396682791984, 0.6486486486486487, {'bootstrap': False, 'criterion': 'gini', 'max_depth': 5, 'n_estimators': 100, 'n_jobs': -1})
+Gaussian
+(0.5846579129232896, 0.8662873399715505, {'var_smoothing': 1e-08})
+Not Binary
+KNN
+(0.48030407740152037, 0.0915539414194231, {'leaf_size': 30, 'n_jobs': -1, 'n_neighbors': 4, 'p': 1, 'weights': 'uniform'})
+Random Forest Classifer
+(0.5141672425708362, 0.08333333333333333, {'bootstrap': True, 'criterion': 'gini', 'max_depth': 5, 'n_estimators': 100, 'n_jobs': -1})
+Gaussian
+(0.06288873531444368, 0.059258984758599316, {'var_smoothing': 1e-08})
+
+'''
