@@ -28,7 +28,7 @@ def data_cleaning():
                       'Arr_Del_morethan15', 'Cancelled', 'Diverted',
                       'DistanceGroup', 'UniqueCarrier', 'Carrier_Delay', 'WeatherDelay', 'NAS_Delay',
                       'Security_Delay', 'Late_Aircraft_Delay', 'Top_Carriers', 'Top_Origin',
-                      'DEPTIME_GROUP1', 'DEPTIME_GROUP2', 'DEPTIME_GROUP3' ], axis=1, inplace=True)
+                      'DEPTIME_GROUP1', 'DEPTIME_GROUP2', 'DEPTIME_GROUP3' , 'Tai_lNum', 'Origin_City_Name', 'Origin_State'], axis=1, inplace=True)
 
     flight_2017 = pd.read_csv('fl_samp.csv', delimiter=',')
     #drop useless flight data
@@ -85,23 +85,54 @@ def smote(X,N,k):
     """
     # the number of columns in the number features and
     # the number of rows is the number of observations (points)
-    n, m = X.shape
-    synthetic_samples = np.zeros((N*n, m))
+    #n, m = X.shape
+    #synthetic_samples = np.zeros((N*n, m))
     #create tree
-    tree = KDTree(X)
+    #tree = KDTree(X)
+    # Sorry Caelan I'm sure your code worked great for you but I'm going to 
+    # replace it with my own
+    """
     for i in range(m):
         #get k nearest neighbors for the current row
-        dist, indices = tree.query(X[i:i+1], k=k)
+        dist, nearest = tree.query(X[i:i+1], k=k)
         #now we have to create our new samples
         for j in range(N):
             #random choice of the nearest neighbors
-            neighbor = X[indices[0][np.random.randint(len(indices[0]))]]
+            neighbor_index = np.random.choice(nearest[0])
+            neighbor = X[neighbor_index:neighbor_index+1]
             #now generate a random point that lies between the two original values
             random_point = np.random.uniform(0, 1, m)
             #set the row of the new array
-            synthetic_samples[i*N+j] = X[i] + (neighbor - X[i])*random_point
+            synthetic_samples[i*N+j] = X[i:i+1] + (neighbor - X[i:i+1])*random_point
 
     return synthetic_samples
+    """
+    # Create the KD Tree for use
+    tree = KDTree(X)
+    
+    # Add the synthetic minorities
+    synth = []
+    n = X.shape[1]
+    for sample in X:
+        # Get the k nearest neighbors
+        dist, nearest = tree.query(sample.reshape(1,-1), k=k)
+        for _ in range(N):
+            # Select a neighbor among the nearest
+            selected = X[np.random.choice(nearest[0])]
+            
+            # Add a point between the two
+            lower = [min(selected[i],sample[i]) for i in range(4)]
+            upper = [max(selected[i],sample[i]) for i in range(4)]
+            
+            # Deal with the one-hot-encoded columns correctly
+            to_append = np.random.uniform(lower,upper)
+            if np.random.choice([0,1]) == 1:
+                to_append = np.concatenate((to_append,sample[4:]))
+            else:
+                to_append = np.concatenate((to_append,selected[4:]))
+            #to_append[-1] = sample[-1]
+            synth.append(to_append)
+    return np.array(synth)
 
 def train_test_data(train_size=0.7, binary=True):
     ''' This function takes in the flight data from 2016 and returns a train_test_split of the data
@@ -113,10 +144,7 @@ def train_test_data(train_size=0.7, binary=True):
     '''
     flight_2016, _  = data_cleaning()
     #one hot encode
-    flight_2016 = pd.get_dummies(flight_2016, columns=['Tai_lNum',
-                                                       'Origin_Airport',
-                                                       'Origin_City_Name',
-                                                       'Origin_State' ], drop_first=True)
+    flight_2016 = pd.get_dummies(flight_2016, columns=['Origin_Airport'], drop_first=True)
     if binary:
         #create the binary labels for if you were late or not
 
@@ -253,7 +281,7 @@ def best_random_forest_reg(binary):
             recall (recall) best recall score from the data 
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
-    random_forest_regression = RandomForestRegressor()
+    random_forest_regression = RandomForestClassifier()
     parameters = {'n_estimators':(10,50,100,500,1000), 'criterion':("squared_error","absolute_error","poisson"),\
         'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":[-1]}
     gridsearch = GridSearchCV(random_forest_regression, parameters)
@@ -316,6 +344,7 @@ if __name__ == "__main__":
     #flight_2016, flight_2017 = data_cleaning()
     #print(pd.unique(flight_2016['Dep_Delay']))
     #print(flight_2016['Dep_Delay'].value_counts())
+    """
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
     print("Binary")
     print("KNN")
@@ -337,3 +366,7 @@ if __name__ == "__main__":
     print(best_elastic(False))
     print("Gaussian")
     print(best_Gaussian(False))
+    """
+    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
+    smitten = smote(X_train[y_train==400].to_numpy(),2,2)
+    print(smitten)
