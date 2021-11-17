@@ -286,6 +286,10 @@ def best_kNN(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for the KNeightborsClassifier, then uses those to
     classify the data
         Parameters:
+            X_train (array) X training data
+            X_test (array) X test data
+            y_train (array) y train data
+            y_test (array) y test data
             binary (binary): Use the late binary or not
         Returns:
             best_score (float) best accuracy from the data
@@ -311,6 +315,10 @@ def best_logistic(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for the LogisticRegression, then uses those to
     classify the data
         Parameters:
+            X_train (array) X training data
+            X_test (array) X test data
+            y_train (array) y train data
+            y_test (array) y test data
             binary (binary): Use the late binary or not
         Returns:
             best_score (float) best accuracy from the data
@@ -336,6 +344,10 @@ def best_elastic(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for ElasticRegression, then uses those to
     predict the data
         Parameters:
+            X_train (array) X training data
+            X_test (array) X test data
+            y_train (array) y train data
+            y_test (array) y test data
             binary (binary): Use the late binary or not
         Returns:
             best_score (float) best accuracy from the data
@@ -361,6 +373,10 @@ def best_random_forest_reg(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for RandomForestRegression, then uses those to
     predict the data
         Parameters:
+            X_train (array) X training data
+            X_test (array) X test data
+            y_train (array) y train data
+            y_test (array) y test data
             binary (binary): Use the late binary or not
         Returns:
             best_score (float) best accuracy from the data
@@ -385,6 +401,10 @@ def best_random_forest_class(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for the RandomForestClassifier, then uses those to
     classify the data
         Parameters:
+            X_train (array) X training data
+            X_test (array) X test data
+            y_train (array) y train data
+            y_test (array) y test data
             binary (binary): Use the late binary or not
         Returns:
             best_score (float) best accuracy from the data
@@ -410,6 +430,10 @@ def best_Gaussian(X_train, X_test, y_train, y_test, binary):
     '''Calculates the best hyperparameters for the GaussianNB, then uses those to
     classify the data
         Parameters:
+            X_train (array) X training data
+            X_test (array) X test data
+            y_train (array) y train data
+            y_test (array) y test data
             binary (binary): Use the late binary or not
         Returns:
             best_score (float) best accuracy from the data
