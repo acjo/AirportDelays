@@ -512,5 +512,4 @@ Random Forest Classifer
 (0.5141672425708362, 0.08333333333333333, {'bootstrap': True, 'criterion': 'gini', 'max_depth': 5, 'n_estimators': 100, 'n_jobs': -1})
 Gaussian
 (0.06288873531444368, 0.059258984758599316, {'var_smoothing': 1e-08})
-
 '''
