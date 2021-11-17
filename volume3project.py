@@ -282,8 +282,8 @@ def best_random_forest_reg(binary):
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     random_forest_regression = RandomForestClassifier()
-    parameters = {'n_estimators':(10,50,100,500,1000), 'criterion':("squared_error","absolute_error","poisson"),\
-        'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":[-1]}
+    parameters = {'n_estimators':[100], 'criterion':("squared_error","absolute_error","poisson"),\
+        'max_depth':(5,10,15,20), 'bootstrap':(True,False), "n_jobs":[-1]}
     gridsearch = GridSearchCV(random_forest_regression, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -303,8 +303,8 @@ def best_random_forest_class(binary):
             hyperparameters (dictionary) best hyperparameters from the data'''
     X_train,X_test,y_train,y_test = train_test_data(train_size=0.7, binary=binary)
     random_forest_class = RandomForestClassifier()
-    parameters = {'n_estimators':(10,50,100,500,1000), 'criterion':("gini", "entropy"),\
-        'max_depth':[5,20], 'bootstrap':(True,False), "n_jobs":[-1]}
+    parameters = {'n_estimators':[100], 'criterion':("gini", "entropy"),\
+        'max_depth':(5,10,15,20), 'bootstrap':(True,False), "n_jobs":[-1]}
     gridsearch = GridSearchCV(random_forest_class, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -344,29 +344,29 @@ if __name__ == "__main__":
     #flight_2016, flight_2017 = data_cleaning()
     #print(pd.unique(flight_2016['Dep_Delay']))
     #print(flight_2016['Dep_Delay'].value_counts())
-    """
-    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
-    print("Binary")
-    print("KNN")
-    # print(best_kNN(True))
-    print("Logistic")
-    # print(best_logistic(True))
-    print("Random Forest Classifer")
-    print(best_random_forest_class(True))
-    print("Elastic")
-    print(best_elastic(True))
-    print(best_Gaussian(True))
 
-    print("Not Binary")
-    print("KNN")
-    print(best_kNN(False))
-    print("Random Forest Classifer")
-    print(best_random_forest_class(False))
-    print("Elastic")
-    print(best_elastic(False))
-    print("Gaussian")
-    print(best_Gaussian(False))
-    """
+    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
+    # print("Binary")
+    # print("KNN")
+    # print(best_kNN(True))
+    # print("Logistic")
+    # print(best_logistic(True))
+    # print("Random Forest Classifer")
+    # print(best_random_forest_class(True))
+    # print("Elastic")
+    # print(best_elastic(True))
+    # print(best_Gaussian(True))
+
+    # print("Not Binary")
+    # print("KNN")
+    # print(best_kNN(False))
+    # print("Random Forest Classifer")
+    # print(best_random_forest_class(False))
+    # print("Elastic")
+    # print(best_elastic(False))
+    # print("Gaussian")
+    # print(best_Gaussian(False))
+
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
     smitten = smote(X_train[y_train==400].to_numpy(),2,2)
     print(smitten)
