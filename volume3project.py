@@ -231,9 +231,12 @@ def train_test_data(train_size=0.7, binary=False, smote_data=True):
             X_train = pd.concat([X_train, smote_600_df])
             y_train = pd.concat([y_train, smote_600_labels_df])
 
+
+            '''
             #smote data for 700 minutes (zero plantes are late by 700 minutes so ignore)
-            #smote data for 800 minutes
+            #smote data for 800 minutes, only 1 datapoint
             mask = y_train == 800
+            print(sum(mask))
             train_800 = X_train[mask]
             smote_800 = smote(train_800.to_numpy(), 200, 1)
             smote_800_df = pd.DataFrame(smote_800, columns=X_train.columns)
@@ -241,8 +244,10 @@ def train_test_data(train_size=0.7, binary=False, smote_data=True):
             smote_800_labels_df = pd.Series(smote_800_labels)
             X_train = pd.concat([X_train, smote_800_df])
             y_train = pd.concat([y_train, smote_800_labels_df])
-            #smote data for 900 minutes
+
+            #smote data for 900 minutes, only 1 datapoint
             mask = y_train == 900
+            print(sum(mask))
             train_900 = X_train[mask]
             smote_900 = smote(train_900.to_numpy(), 120, 1)
             smote_900_df = pd.DataFrame(smote_900, columns=X_train.columns)
@@ -250,8 +255,8 @@ def train_test_data(train_size=0.7, binary=False, smote_data=True):
             smote_900_labels_df = pd.Series(smote_900_labels)
             X_train = pd.concat([X_train, smote_900_df])
             y_train = pd.concat([y_train, smote_900_labels_df])
-            #smote data for 1000 minutes
 
+            #smote data for 1000 minutes, only 1 datapoint
             mask = y_train == 1000
             train_1000 = X_train[mask]
             smote_1000 = smote(train_1000.to_numpy(), 120, 1)
@@ -260,6 +265,8 @@ def train_test_data(train_size=0.7, binary=False, smote_data=True):
             smote_1000_labels_df = pd.Series(smote_1000_labels)
             X_train = pd.concat([X_train, smote_1000_df])
             y_train = pd.concat([y_train, smote_1000_labels_df])
+            '''
+
 
             #smote data for more than 1000 minutes
             mask = y_train == 10000
@@ -413,6 +420,7 @@ if __name__ == "__main__":
     #print(flight_2016['Dep_Delay'].value_counts())
 
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=True)
+
     print("Binary")
     print("KNN")
     print(best_kNN(True))
