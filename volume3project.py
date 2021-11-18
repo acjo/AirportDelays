@@ -23,12 +23,17 @@ def data_cleaning():
     flight_2016 = pd.read_csv('flight.csv', delimiter=',')
     #drop useless flight data
     flight_2016.drop(['Month', 'Year', 'Day', 'Flight_Date', 'FlightNum',
-                      'Departure_Time', 'DepDel15', 'Dep_Delay_Groups',
-                      'Arrival_Time', 'Dep_Delay', 'Arr_Delay_Minutes',
+                      'Departure_Time','Dep_Delay', 'DepDel15', 'Dep_Delay_Groups',
+                      'Arrival_Time', 'Arr_Delay_Minutes',
                       'Arr_Del_morethan15', 'Cancelled', 'Diverted',
                       'DistanceGroup', 'UniqueCarrier', 'Carrier_Delay', 'WeatherDelay', 'NAS_Delay',
                       'Security_Delay', 'Late_Aircraft_Delay', 'Top_Carriers', 'Top_Origin',
                       'DEPTIME_GROUP1', 'DEPTIME_GROUP2', 'DEPTIME_GROUP3' , 'Tai_lNum', 'Origin_City_Name', 'Origin_State'], axis=1, inplace=True)
+
+    #change to be rolling departure times 
+    mask = flight_2016['Scheduled_Departure'] >= 1200
+    flight_2016[mask]['Scheduled_Departure'] *= -1
+    flight_2016[mask]['Scheduled_Departure'] += 2400
 
     flight_2017 = pd.read_csv('fl_samp.csv', delimiter=',')
     #drop useless flight data
@@ -137,7 +142,7 @@ def train_test_data(train_size=0.7, binary=False, smote_data=True):
         flight_2016['Delay'][mask_on_time] = 0
         flight_2016['Delay'][~mask_on_time] = 1
         y = flight_2016['Delay']
-        X = flight_2016.drop(['Dep_Delay', 'Delay'], axis=1)
+        X = flight_2016.drop(['Arrival_Delay', 'Delay'], axis=1)
         #traint test split on the binary data
         X_train, X_test, y_train, y_test = train_test_split(X,
                                                             y,
@@ -469,24 +474,22 @@ def best_Gaussian(X_train, X_test, y_train, y_test, binary):
 
 if __name__ == "__main__":
     #plot_data()
-    #flight_2016, flight_2017 = data_cleaning()
-    #print(pd.unique(flight_2016['Dep_Delay']))
-    #print(flight_2016['Dep_Delay'].value_counts())
 
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=True, smote_data=False)
     binary = True
-    # print("Binary")
-    # print("KNN")
-    # print(best_kNN(X_train, X_test, y_train, y_test,binary))
-    # print("Logistic")
-    # print(best_logistic(X_train, X_test, y_train, y_test,binary))
-    # print("Random Forest Classifer")
-    # print(best_random_forest_class(X_train, X_test, y_train, y_test,binary))
-    # print("Elastic")
-    # print(best_elastic(True))
-    # print("Gaussian")
-    # print(best_Gaussian(X_train, X_test, y_train, y_test,binary))
+    print("Binary:")
+    print("KNN")
+    print(best_kNN(X_train, X_test, y_train, y_test,binary))
+    print("Logistic")
+    print(best_logistic(X_train, X_test, y_train, y_test,binary))
+    print("Random Forest Classifer")
+    print(best_random_forest_class(X_train, X_test, y_train, y_test,binary))
+    #print("Elastic")
+    #print(best_elastic(X_train, X_test, y_train, y_test,binary))
+    print("Gaussian")
+    print(best_Gaussian(X_train, X_test, y_train, y_test,binary))
 
+    '''
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=True)
     binary = False
     # print("Not Binary")
@@ -502,6 +505,7 @@ if __name__ == "__main__":
     # X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
     # smitten = smote(X_train[y_train==400].to_numpy(),2,2)
     # print(smitten)
+    '''
 
 
 '''
