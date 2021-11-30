@@ -1,10 +1,13 @@
+Optimization terminated successfully.
+         Current function value: 0.666277
+         Iterations 6
                            Logit Regression Results
 ==============================================================================
 Dep. Variable:                  Delay   No. Observations:                 3374
 Model:                          Logit   Df Residuals:                     3352
 Method:                           MLE   Df Model:                           21
 Date:                Tue, 30 Nov 2021   Pseudo R-squ.:                 0.03875
-Time:                        13:45:04   Log-Likelihood:                -2248.0
+Time:                        13:52:12   Log-Likelihood:                -2248.0
 converged:                       True   LL-Null:                       -2338.6
 Covariance Type:            nonrobust   LLR p-value:                 1.700e-27
 =======================================================================================
@@ -33,13 +36,34 @@ Origin_Airport_PHX      2.1274      0.780      2.726      0.006       0.598     
 Origin_Airport_SFO      1.7589      0.759      2.319      0.020       0.272       3.246
 Origin_Airport_SLC      0.7674      0.913      0.841      0.400      -1.021       2.556
 =======================================================================================
+Optimization terminated successfully.
+         Current function value: 0.673956
+         Iterations 4
+                           Logit Regression Results
+==============================================================================
+Dep. Variable:                  Delay   No. Observations:                 3374
+Model:                          Logit   Df Residuals:                     3369
+Method:                           MLE   Df Model:                            4
+Date:                Tue, 30 Nov 2021   Pseudo R-squ.:                 0.02767
+Time:                        13:52:12   Log-Likelihood:                -2273.9
+converged:                       True   LL-Null:                       -2338.6
+Covariance Type:            nonrobust   LLR p-value:                 5.165e-27
+=======================================================================================
+                          coef    std err          z      P>|z|      [0.025      0.975]
+---------------------------------------------------------------------------------------
+const                  -1.3216      0.155     -8.516      0.000      -1.626      -1.017
+DayOfWeek              -0.0054      0.017     -0.307      0.759      -0.040       0.029
+Scheduled_Departure     0.0005   7.47e-05      6.674      0.000       0.000       0.001
+Scheduled_Arrival       0.0004   6.52e-05      6.742      0.000       0.000       0.001
+Distance             1.573e-05   3.83e-05      0.411      0.681   -5.93e-05    9.08e-05
+=======================================================================================
                             OLS Regression Results
 ==============================================================================
 Dep. Variable:                  Delay   R-squared:                       0.011
 Model:                            OLS   Adj. R-squared:                  0.004
 Method:                 Least Squares   F-statistic:                     1.700
 Date:                Tue, 30 Nov 2021   Prob (F-statistic):             0.0242
-Time:                        13:45:05   Log-Likelihood:                -24888.
+Time:                        13:52:12   Log-Likelihood:                -24888.
 No. Observations:                3374   AIC:                         4.982e+04
 Df Residuals:                    3352   BIC:                         4.996e+04
 Df Model:                          21
@@ -74,4 +98,30 @@ Omnibus:                     8108.295   Durbin-Watson:                   2.015
 Prob(Omnibus):                  0.000   Jarque-Bera (JB):         55222395.843
 Skew:                          24.618   Prob(JB):                         0.00
 Kurtosis:                     627.808   Cond. No.                     1.44e+05
+==============================================================================
+
+                            OLS Regression Results
+==============================================================================
+Dep. Variable:                  Delay   R-squared:                       0.004
+Model:                            OLS   Adj. R-squared:                  0.003
+Method:                 Least Squares   F-statistic:                     3.311
+Date:                Tue, 30 Nov 2021   Prob (F-statistic):             0.0102
+Time:                        13:52:12   Log-Likelihood:                -24899.
+No. Observations:                3374   AIC:                         4.981e+04
+Df Residuals:                    3369   BIC:                         4.984e+04
+Df Model:                           4
+Covariance Type:            nonrobust
+=======================================================================================
+                          coef    std err          t      P>|t|      [0.025      0.975]
+---------------------------------------------------------------------------------------
+const                 -26.9739     29.160     -0.925      0.355     -84.146      30.198
+DayOfWeek               3.8167      3.329      1.146      0.252      -2.711      10.344
+Scheduled_Departure     0.0404      0.014      2.839      0.005       0.012       0.068
+Scheduled_Arrival       0.0092      0.012      0.742      0.458      -0.015       0.034
+Distance               -0.0069      0.007     -0.944      0.345      -0.021       0.007
+==============================================================================
+Omnibus:                     8142.969   Durbin-Watson:                   2.012
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):         56754146.420
+Skew:                          24.875   Prob(JB):                         0.00
+Kurtosis:                     636.427   Cond. No.                     1.16e+04
 ==============================================================================

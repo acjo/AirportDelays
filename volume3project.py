@@ -468,7 +468,7 @@ def best_Gaussian(X_train, X_test, y_train, y_test, binary):
     else:
         recall = recall_score(y_test,prediction, average='macro')
         return best_score, recall, best_params
-def ols_reporter(X_train, X_test, y_train, y_test, binary):
+def ols_reporter(X_train, X_test, y_train, y_test, binary, airport = True):
     '''Calculates the best hyperparameters for the OLS, then uses those to
     classify the data
         Parameters:
@@ -477,6 +477,7 @@ def ols_reporter(X_train, X_test, y_train, y_test, binary):
             y_train (array) y train data
             y_test (array) y test data
             binary (binary): Use the late binary or not
+            airport (binary): Use the airport data or not
         Returns:
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data
@@ -484,6 +485,13 @@ def ols_reporter(X_train, X_test, y_train, y_test, binary):
     # X_train = sm.add_constant(X_train)
     # print(min(np.array(y_train)))
     # print(np.max(np.array(X_train)/4000))
+    if airport is False:
+        X_train.drop(['Origin_Airport_BOS', 'Origin_Airport_CLT', 'Origin_Airport_DEN',
+       'Origin_Airport_DFW', 'Origin_Airport_DTW', 'Origin_Airport_EWR',
+       'Origin_Airport_IAH', 'Origin_Airport_JFK', 'Origin_Airport_LAS',
+       'Origin_Airport_LAX', 'Origin_Airport_LGA', 'Origin_Airport_MCO',
+       'Origin_Airport_MSP', 'Origin_Airport_ORD', 'Origin_Airport_PHX',
+       'Origin_Airport_SFO', 'Origin_Airport_SLC'], axis=1, inplace=True)
     if binary:
         X_train = sm.add_constant(X_train)
         ols = sm.Logit(y_train,X_train)
@@ -509,6 +517,7 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=True, smote_data=False)
     binary = True
     print(ols_reporter(X_train, X_test, y_train, y_test, True))
+    print(ols_reporter(X_train, X_test, y_train, y_test, True, False))
     # print("Binary:")
     # print("KNN")
     # print(best_kNN(X_train, X_test, y_train, y_test,binary))
@@ -525,6 +534,7 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=False)
     binary = False
     print(ols_reporter(X_train, X_test, y_train, y_test, False))
+    print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
     # print("Not Binary")
     # print("KNN")
     # print(best_kNN(X_train, X_test, y_train, y_test,binary))
