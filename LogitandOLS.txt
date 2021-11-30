@@ -1,12 +1,10 @@
-Current function value: 0.666277
-         Iterations 6
                            Logit Regression Results
 ==============================================================================
 Dep. Variable:                  Delay   No. Observations:                 3374
 Model:                          Logit   Df Residuals:                     3352
 Method:                           MLE   Df Model:                           21
 Date:                Tue, 30 Nov 2021   Pseudo R-squ.:                 0.03875
-Time:                        13:32:44   Log-Likelihood:                -2248.0
+Time:                        13:45:04   Log-Likelihood:                -2248.0
 converged:                       True   LL-Null:                       -2338.6
 Covariance Type:            nonrobust   LLR p-value:                 1.700e-27
 =======================================================================================
@@ -37,43 +35,43 @@ Origin_Airport_SLC      0.7674      0.913      0.841      0.400      -1.021     
 =======================================================================================
                             OLS Regression Results
 ==============================================================================
-Dep. Variable:                      y   R-squared:                       0.208
-Model:                            OLS   Adj. R-squared:                  0.204
-Method:                 Least Squares   F-statistic:                     61.29
-Date:                Tue, 30 Nov 2021   Prob (F-statistic):          2.86e-229
-Time:                        13:32:44   Log-Likelihood:                -36610.
-No. Observations:                4931   AIC:                         7.326e+04
-Df Residuals:                    4909   BIC:                         7.341e+04
+Dep. Variable:                  Delay   R-squared:                       0.011
+Model:                            OLS   Adj. R-squared:                  0.004
+Method:                 Least Squares   F-statistic:                     1.700
+Date:                Tue, 30 Nov 2021   Prob (F-statistic):             0.0242
+Time:                        13:45:05   Log-Likelihood:                -24888.
+No. Observations:                3374   AIC:                         4.982e+04
+Df Residuals:                    3352   BIC:                         4.996e+04
 Df Model:                          21
 Covariance Type:            nonrobust
 =======================================================================================
                           coef    std err          t      P>|t|      [0.025      0.975]
 ---------------------------------------------------------------------------------------
-const                -265.2416     90.760     -2.922      0.003    -443.173     -87.310
-DayOfWeek              20.5962      3.023      6.814      0.000      14.670      26.522
-Scheduled_Departure     0.2191      0.013     17.393      0.000       0.194       0.244
-Scheduled_Arrival       0.0102      0.011      0.930      0.352      -0.011       0.032
-Distance               -0.0128      0.008     -1.569      0.117      -0.029       0.003
-Origin_Airport_BOS     16.8938     93.610      0.180      0.857    -166.623     200.410
-Origin_Airport_CLT     76.4239    110.255      0.693      0.488    -139.726     292.574
-Origin_Airport_DEN    544.5754     94.466      5.765      0.000     359.379     729.772
-Origin_Airport_DFW    -44.2023     90.657     -0.488      0.626    -221.930     133.526
-Origin_Airport_DTW    -31.1256    109.299     -0.285      0.776    -245.401     183.150
-Origin_Airport_EWR    137.4020    115.192      1.193      0.233     -88.426     363.230
-Origin_Airport_IAH    548.1266     94.375      5.808      0.000     363.109     733.144
-Origin_Airport_JFK     83.8931     91.043      0.921      0.357     -94.591     262.377
-Origin_Airport_LAS    -24.0755     98.071     -0.245      0.806    -216.339     168.188
-Origin_Airport_LAX     62.9394     91.156      0.690      0.490    -115.767     241.646
-Origin_Airport_LGA     31.7546     95.560      0.332      0.740    -155.586     219.095
-Origin_Airport_MCO    357.4839     92.337      3.872      0.000     176.463     538.505
-Origin_Airport_MSP     11.6625    106.214      0.110      0.913    -196.564     219.889
-Origin_Airport_ORD   -115.6491     92.754     -1.247      0.213    -297.489      66.191
-Origin_Airport_PHX   -103.3453     99.265     -1.041      0.298    -297.949      91.258
-Origin_Airport_SFO    170.8084     92.049      1.856      0.064      -9.649     351.266
-Origin_Airport_SLC   -118.3524    130.990     -0.904      0.366    -375.151     138.447
+const                 -61.9009     87.285     -0.709      0.478    -233.038     109.236
+DayOfWeek               4.0075      3.329      1.204      0.229      -2.520      10.535
+Scheduled_Departure     0.0476      0.015      3.186      0.001       0.018       0.077
+Scheduled_Arrival       0.0099      0.013      0.784      0.433      -0.015       0.035
+Distance               -0.0036      0.009     -0.402      0.688      -0.021       0.014
+Origin_Airport_BOS     24.7219     91.069      0.271      0.786    -153.834     203.278
+Origin_Airport_CLT     17.5857    116.186      0.151      0.880    -210.217     245.388
+Origin_Airport_DEN    179.5135     98.038      1.831      0.067     -12.707     371.734
+Origin_Airport_DFW     -0.0962     86.748     -0.001      0.999    -170.181     169.989
+Origin_Airport_DTW     -0.3693    121.867     -0.003      0.998    -239.310     238.571
+Origin_Airport_EWR     33.2180    118.642      0.280      0.780    -199.399     265.835
+Origin_Airport_IAH    148.5272     98.015      1.515      0.130     -43.648     340.702
+Origin_Airport_JFK     25.5028     87.770      0.291      0.771    -146.586     197.592
+Origin_Airport_LAS      3.4380     94.142      0.037      0.971    -181.144     188.020
+Origin_Airport_LAX     15.8014     87.508      0.181      0.857    -155.774     187.376
+Origin_Airport_LGA     10.7406     92.104      0.117      0.907    -169.844     191.326
+Origin_Airport_MCO     51.2288     90.871      0.564      0.573    -126.939     229.397
+Origin_Airport_MSP     34.6905    104.690      0.331      0.740    -170.572     239.953
+Origin_Airport_ORD     -7.2969     88.887     -0.082      0.935    -181.576     166.982
+Origin_Airport_PHX     -3.8929     95.837     -0.041      0.968    -191.798     184.012
+Origin_Airport_SFO      8.9826     89.400      0.100      0.920    -166.301     184.266
+Origin_Airport_SLC    -26.6715    125.080     -0.213      0.831    -271.913     218.569
 ==============================================================================
-Omnibus:                     8937.575   Durbin-Watson:                   1.421
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):         18475914.220
-Skew:                          12.995   Prob(JB):                         0.00
-Kurtosis:                     301.747   Cond. No.                     1.78e+05
+Omnibus:                     8108.295   Durbin-Watson:                   2.015
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):         55222395.843
+Skew:                          24.618   Prob(JB):                         0.00
+Kurtosis:                     627.808   Cond. No.                     1.44e+05
 ==============================================================================

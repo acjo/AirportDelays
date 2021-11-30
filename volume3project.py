@@ -522,7 +522,7 @@ if __name__ == "__main__":
     # print(best_Gaussian(X_train, X_test, y_train, y_test,binary))
 
 
-    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=True)
+    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=False)
     binary = False
     print(ols_reporter(X_train, X_test, y_train, y_test, False))
     # print("Not Binary")
