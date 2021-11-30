@@ -10,6 +10,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KDTree
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import recall_score
+
+import statsmodels.api as sm
+
 import warnings
 warnings.filterwarnings('ignore')
 #from sklearn.tree import export_graphviz
@@ -465,6 +468,34 @@ def best_Gaussian(X_train, X_test, y_train, y_test, binary):
     else:
         recall = recall_score(y_test,prediction, average='macro')
         return best_score, recall, best_params
+def ols_reporter(X_train, X_test, y_train, y_test, binary):
+    '''Calculates the best hyperparameters for the OLS, then uses those to
+    classify the data
+        Parameters:
+            X_train (array) X training data
+            X_test (array) X test data
+            y_train (array) y train data
+            y_test (array) y test data
+            binary (binary): Use the late binary or not
+        Returns:
+            best_score (float) best accuracy from the data
+            recall (recall) best recall score from the data
+            hyperparameters (dictionary) best hyperparameters from the data'''
+    # X_train = sm.add_constant(X_train)
+    # print(min(np.array(y_train)))
+    # print(np.max(np.array(X_train)/4000))
+    if binary:
+        X_train = sm.add_constant(X_train)
+        ols = sm.Logit(y_train,X_train)
+        results = ols.fit()
+    else:
+        X_train = sm.add_constant(X_train)
+        ols = sm.OLS(y_train, X_train)
+        results = ols.fit()
+    # prediction = ols.predict(X_test)
+    # best_score = ols.score(X_test,y_test)
+    return results.summary()
+
 #kNN
 #NaiveBayes
 #RandomForrest
@@ -477,26 +508,28 @@ if __name__ == "__main__":
 
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=True, smote_data=False)
     binary = True
-    print("Binary:")
-    print("KNN")
-    print(best_kNN(X_train, X_test, y_train, y_test,binary))
-    print("Logistic")
-    print(best_logistic(X_train, X_test, y_train, y_test,binary))
-    print("Random Forest Classifer")
-    print(best_random_forest_class(X_train, X_test, y_train, y_test,binary))
-    #print("Elastic")
-    #print(best_elastic(X_train, X_test, y_train, y_test,binary))
-    print("Gaussian")
-    print(best_Gaussian(X_train, X_test, y_train, y_test,binary))
+    print(ols_reporter(X_train, X_test, y_train, y_test, True))
+    # print("Binary:")
+    # print("KNN")
+    # print(best_kNN(X_train, X_test, y_train, y_test,binary))
+    # print("Logistic")
+    # print(best_logistic(X_train, X_test, y_train, y_test,binary))
+    # print("Random Forest Classifer")
+    # print(best_random_forest_class(X_train, X_test, y_train, y_test,binary))
+    # #print("Elastic")
+    # #print(best_elastic(X_train, X_test, y_train, y_test,binary))
+    # print("Gaussian")
+    # print(best_Gaussian(X_train, X_test, y_train, y_test,binary))
 
-    '''
+
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=True)
     binary = False
+    print(ols_reporter(X_train, X_test, y_train, y_test, False))
     # print("Not Binary")
     # print("KNN")
     # print(best_kNN(X_train, X_test, y_train, y_test,binary))
-    print("Random Forest Classifer")
-    print(best_random_forest_class(X_train, X_test, y_train, y_test,binary))
+    # print("Random Forest Classifer")
+    # print(best_random_forest_class(X_train, X_test, y_train, y_test,binary))
     # print("Elastic")
     # print(best_elastic(False))
     # print("Gaussian")
@@ -505,7 +538,7 @@ if __name__ == "__main__":
     # X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False)
     # smitten = smote(X_train[y_train==400].to_numpy(),2,2)
     # print(smitten)
-    '''
+
 
 
 '''
