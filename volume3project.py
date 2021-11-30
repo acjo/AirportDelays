@@ -126,7 +126,7 @@ def smote(X,N,k):
             synth.append(to_append)
     return np.array(synth)
 
-def train_test_data(train_size=0.7, binary=False, smote_data=True):
+def train_test_data(train_size=0.7, binary=False, smote_data=True, bin_data=True):
     ''' This function takes in the flight data from 2016 and returns a train_test_split of the data
     :param flight_2016: pandas dataframe containing data
     :param train_size: the amount of data to test on defualts to a 70-30 train test split
@@ -152,147 +152,155 @@ def train_test_data(train_size=0.7, binary=False, smote_data=True):
                                                             train_size=train_size,
                                                             random_state=0)
     else:
-        #create appropriate masks
-        mask_on_time = flight_2016['Arrival_Delay'] <=0
-        mask_15_late = (flight_2016['Arrival_Delay'] > 0) & (flight_2016['Arrival_Delay'] <=15)
-        mask_30_late = (flight_2016['Arrival_Delay'] > 15) & (flight_2016['Arrival_Delay'] <=30)
-        mask_45_late = (flight_2016['Arrival_Delay'] > 30) & (flight_2016['Arrival_Delay'] <=45)
-        mask_60_late = (flight_2016['Arrival_Delay'] > 45) & (flight_2016['Arrival_Delay'] <=60)
-        mask_120_late = (flight_2016['Arrival_Delay'] > 60) & (flight_2016['Arrival_Delay'] <=120)
-        mask_180_late = (flight_2016['Arrival_Delay'] > 120) & (flight_2016['Arrival_Delay'] <=180)
-        mask_240_late = (flight_2016['Arrival_Delay'] > 180) & (flight_2016['Arrival_Delay'] <=240)
-        mask_300_late = (flight_2016['Arrival_Delay'] > 240) & (flight_2016['Arrival_Delay'] <=300)
-        mask_400_late = (flight_2016['Arrival_Delay'] > 300) & (flight_2016['Arrival_Delay'] <=400)
-        mask_500_late = (flight_2016['Arrival_Delay'] > 400) & (flight_2016['Arrival_Delay'] <=500)
-        mask_600_late = (flight_2016['Arrival_Delay'] > 500) & (flight_2016['Arrival_Delay'] <=600)
-        mask_700_late = (flight_2016['Arrival_Delay'] > 600) & (flight_2016['Arrival_Delay'] <=700)
-        mask_800_late = (flight_2016['Arrival_Delay'] > 700) & (flight_2016['Arrival_Delay'] <=800)
-        mask_900_late = (flight_2016['Arrival_Delay'] > 800) & (flight_2016['Arrival_Delay'] <=900)
-        mask_1000_late = (flight_2016['Arrival_Delay'] > 900) & (flight_2016['Arrival_Delay'] <=1000)
-        mask_1000_or_more_late = flight_2016['Arrival_Delay'] > 1000
-        flight_2016 = flight_2016.assign(Delay=lambda x: flight_2016.Arrival_Delay *0)
-
-        '''
-        masks = [ mask_on_time, mask_15_late, mask_30_late, mask_45_late, mask_60_late, mask_120_late,
-                  mask_180_late, mask_240_late, mask_300_late, mask_400_late, mask_500_late, mask_600_late,
-                  mask_700_late, mask_800_late, mask_900_late, mask_1000_late, mask_1000_or_more_late]
-        times = [0, 15, 30, 40, 60, 120, 180, 240, 300, 400, 500, 600, 700, 800, 900, 1000, 10000]
-        for time, mask in zip(times, masks):
-            print(time, sum(mask.values))
-        '''
-
-        flight_2016['Delay'][mask_on_time] = 0
-        flight_2016['Delay'][mask_15_late] = 15
-        flight_2016['Delay'][mask_30_late] = 30
-        flight_2016['Delay'][mask_45_late] = 40
-        flight_2016['Delay'][mask_60_late] = 60
-        flight_2016['Delay'][mask_120_late] = 120
-        flight_2016['Delay'][mask_180_late] = 180
-        flight_2016['Delay'][mask_240_late] = 240
-        flight_2016['Delay'][mask_300_late] = 300
-        flight_2016['Delay'][mask_400_late] = 400
-        flight_2016['Delay'][mask_500_late] = 500
-        flight_2016['Delay'][mask_600_late] = 600
-        flight_2016['Delay'][mask_700_late] = 700
-        flight_2016['Delay'][mask_800_late] = 800
-        flight_2016['Delay'][mask_900_late] = 900
-        flight_2016['Delay'][mask_1000_late] = 1000
-        flight_2016['Delay'][mask_1000_or_more_late] = 10000
-        y = flight_2016['Delay']
-        X = flight_2016.drop(['Arrival_Delay', 'Delay'], axis=1)
-
-        X_train, X_test, y_train, y_test = train_test_split(X, 
-                                                            y, 
-                                                            train_size=train_size, 
-                                                            random_state=0)
-        if smote_data:
-
-            #smote data for 240 minutes
-            mask = y_train == 240
-            train_240 = X_train[mask]
-            smote_240 = smote(train_240.to_numpy(), 10, 2)
-            smote_240_df = pd.DataFrame(smote_240, columns=X_train.columns)
-            smote_240_labels = 240*np.ones(smote_240_df.shape[0]).astype(int)
-            smote_240_labels_df = pd.Series(smote_240_labels)
-            X_train = pd.concat([X_train, smote_240_df])
-            y_train = pd.concat([y_train, smote_240_labels_df])
-
-            #smote data for 300 minutes
-            mask = y_train == 300
-            train_300 = X_train[mask]
-            smote_300 = smote(train_300.to_numpy(), 10, 2)
-            smote_300_df = pd.DataFrame(smote_300, columns=X_train.columns)
-            smote_300_labels = 300*np.ones(smote_300_df.shape[0]).astype(int)
-            smote_300_labels_df = pd.Series(smote_300_labels)
-            X_train = pd.concat([X_train, smote_300_df])
-            y_train = pd.concat([y_train, smote_300_labels_df])
-
-            #smote data for 400 minutes
-            mask = y_train == 400
-            train_400 = X_train[mask]
-            smote_400 = smote(train_400.to_numpy(), 10, 2)
-            smote_400_df = pd.DataFrame(smote_400, columns=X_train.columns)
-            smote_400_labels = 400*np.ones(smote_400_df.shape[0]).astype(int)
-            smote_400_labels_df = pd.Series(smote_400_labels)
-            X_train = pd.concat([X_train, smote_400_df])
-            y_train = pd.concat([y_train, smote_400_labels_df])
-
-            #smote data for 500 minutes (zero planes are late by 500 minutes so ignore)
-            #smote data for 600 minutes
-            mask = y_train == 600
-            train_600 = X_train[mask]
-            smote_600 = smote(train_600.to_numpy(), 99, 1)
-            smote_600_df = pd.DataFrame(smote_600, columns=X_train.columns)
-            smote_600_labels = 600*np.ones(smote_600_df.shape[0]).astype(int)
-            smote_600_labels_df = pd.Series(smote_600_labels)
-            X_train = pd.concat([X_train, smote_600_df])
-            y_train = pd.concat([y_train, smote_600_labels_df])
-
+        if bin_data:
+            #create appropriate masks
+            mask_on_time = flight_2016['Arrival_Delay'] <=0
+            mask_15_late = (flight_2016['Arrival_Delay'] > 0) & (flight_2016['Arrival_Delay'] <=15)
+            mask_30_late = (flight_2016['Arrival_Delay'] > 15) & (flight_2016['Arrival_Delay'] <=30)
+            mask_45_late = (flight_2016['Arrival_Delay'] > 30) & (flight_2016['Arrival_Delay'] <=45)
+            mask_60_late = (flight_2016['Arrival_Delay'] > 45) & (flight_2016['Arrival_Delay'] <=60)
+            mask_120_late = (flight_2016['Arrival_Delay'] > 60) & (flight_2016['Arrival_Delay'] <=120)
+            mask_180_late = (flight_2016['Arrival_Delay'] > 120) & (flight_2016['Arrival_Delay'] <=180)
+            mask_240_late = (flight_2016['Arrival_Delay'] > 180) & (flight_2016['Arrival_Delay'] <=240)
+            mask_300_late = (flight_2016['Arrival_Delay'] > 240) & (flight_2016['Arrival_Delay'] <=300)
+            mask_400_late = (flight_2016['Arrival_Delay'] > 300) & (flight_2016['Arrival_Delay'] <=400)
+            mask_500_late = (flight_2016['Arrival_Delay'] > 400) & (flight_2016['Arrival_Delay'] <=500)
+            mask_600_late = (flight_2016['Arrival_Delay'] > 500) & (flight_2016['Arrival_Delay'] <=600)
+            mask_700_late = (flight_2016['Arrival_Delay'] > 600) & (flight_2016['Arrival_Delay'] <=700)
+            mask_800_late = (flight_2016['Arrival_Delay'] > 700) & (flight_2016['Arrival_Delay'] <=800)
+            mask_900_late = (flight_2016['Arrival_Delay'] > 800) & (flight_2016['Arrival_Delay'] <=900)
+            mask_1000_late = (flight_2016['Arrival_Delay'] > 900) & (flight_2016['Arrival_Delay'] <=1000)
+            mask_1000_or_more_late = flight_2016['Arrival_Delay'] > 1000
+            flight_2016 = flight_2016.assign(Delay=lambda x: flight_2016.Arrival_Delay *0)
 
             '''
-            #smote data for 700 minutes (zero plantes are late by 700 minutes so ignore)
-            #smote data for 800 minutes, only 1 datapoint
-            mask = y_train == 800
-            print(sum(mask))
-            train_800 = X_train[mask]
-            smote_800 = smote(train_800.to_numpy(), 200, 1)
-            smote_800_df = pd.DataFrame(smote_800, columns=X_train.columns)
-            smote_800_labels = 800*np.ones(smote_800_df.shape[0]).astype(int)
-            smote_800_labels_df = pd.Series(smote_800_labels)
-            X_train = pd.concat([X_train, smote_800_df])
-            y_train = pd.concat([y_train, smote_800_labels_df])
-
-            #smote data for 900 minutes, only 1 datapoint
-            mask = y_train == 900
-            train_900 = X_train[mask]
-            smote_900 = smote(train_900.to_numpy(), 120, 1)
-            smote_900_df = pd.DataFrame(smote_900, columns=X_train.columns)
-            smote_900_labels = 900*np.ones(smote_900_df.shape[0]).astype(int)
-            smote_900_labels_df = pd.Series(smote_900_labels)
-            X_train = pd.concat([X_train, smote_900_df])
-            y_train = pd.concat([y_train, smote_900_labels_df])
-
-            #smote data for 1000 minutes, only 1 datapoint
-            mask = y_train == 1000
-            train_1000 = X_train[mask]
-            smote_1000 = smote(train_1000.to_numpy(), 120, 1)
-            smote_1000_df = pd.DataFrame(smote_1000, columns=X_train.columns)
-            smote_1000_labels = 1000*np.ones(smote_1000_df.shape[0]).astype(int)
-            smote_1000_labels_df = pd.Series(smote_1000_labels)
-            X_train = pd.concat([X_train, smote_1000_df])
-            y_train = pd.concat([y_train, smote_1000_labels_df])
+            masks = [ mask_on_time, mask_15_late, mask_30_late, mask_45_late, mask_60_late, mask_120_late,
+                    mask_180_late, mask_240_late, mask_300_late, mask_400_late, mask_500_late, mask_600_late,
+                    mask_700_late, mask_800_late, mask_900_late, mask_1000_late, mask_1000_or_more_late ]
+            times = [0, 15, 30, 40, 60, 120, 180, 240, 300, 400, 500, 600, 700, 800, 900, 1000, 10000]
+            for time, mask in zip(times, masks):
+                print(time, sum(mask.values))
             '''
 
+            flight_2016['Delay'][mask_on_time] = 0
+            flight_2016['Delay'][mask_15_late] = 15
+            flight_2016['Delay'][mask_30_late] = 30
+            flight_2016['Delay'][mask_45_late] = 40
+            flight_2016['Delay'][mask_60_late] = 60
+            flight_2016['Delay'][mask_120_late] = 120
+            flight_2016['Delay'][mask_180_late] = 180
+            flight_2016['Delay'][mask_240_late] = 240
+            flight_2016['Delay'][mask_300_late] = 300
+            flight_2016['Delay'][mask_400_late] = 400
+            flight_2016['Delay'][mask_500_late] = 500
+            flight_2016['Delay'][mask_600_late] = 600
+            flight_2016['Delay'][mask_700_late] = 700
+            flight_2016['Delay'][mask_800_late] = 800
+            flight_2016['Delay'][mask_900_late] = 900
+            flight_2016['Delay'][mask_1000_late] = 1000
+            flight_2016['Delay'][mask_1000_or_more_late] = 10000
+            y = flight_2016['Delay']
+            X = flight_2016.drop(['Arrival_Delay', 'Delay'], axis=1)
 
-            #smote data for more than 1000 minutes
-            mask = y_train == 10000
-            train_10000 = X_train[mask]
-            smote_10000 = smote(train_10000.to_numpy(), 120, 1)
-            smote_10000_df = pd.DataFrame(smote_10000, columns=X_train.columns)
-            smote_10000_labels = 1000*np.ones(smote_10000_df.shape[0]).astype(int)
-            smote_10000_labels_df = pd.Series(smote_10000_labels)
-            X_train = pd.concat([X_train, smote_10000_df])
-            y_train = pd.concat([y_train, smote_10000_labels_df])
+            X_train, X_test, y_train, y_test = train_test_split(X,
+                                                                y,
+                                                                train_size=train_size,
+                                                                random_state=0)
+
+            if smote_data:
+                # smote data for 240 minutes
+                mask = y_train == 240
+                train_240 = X_train[mask]
+                smote_240 = smote(train_240.to_numpy(), 10, 2)
+                smote_240_df = pd.DataFrame(smote_240, columns=X_train.columns)
+                smote_240_labels = 240 * np.ones(smote_240_df.shape[0]).astype(int)
+                smote_240_labels_df = pd.Series(smote_240_labels)
+                X_train = pd.concat([X_train, smote_240_df])
+                y_train = pd.concat([y_train, smote_240_labels_df])
+
+                # smote data for 300 minutes
+                mask = y_train == 300
+                train_300 = X_train[mask]
+                smote_300 = smote(train_300.to_numpy(), 10, 2)
+                smote_300_df = pd.DataFrame(smote_300, columns=X_train.columns)
+                smote_300_labels = 300 * np.ones(smote_300_df.shape[0]).astype(int)
+                smote_300_labels_df = pd.Series(smote_300_labels)
+                X_train = pd.concat([X_train, smote_300_df])
+                y_train = pd.concat([y_train, smote_300_labels_df])
+
+                # smote data for 400 minutes
+                mask = y_train == 400
+                train_400 = X_train[mask]
+                smote_400 = smote(train_400.to_numpy(), 10, 2)
+                smote_400_df = pd.DataFrame(smote_400, columns=X_train.columns)
+                smote_400_labels = 400 * np.ones(smote_400_df.shape[0]).astype(int)
+                smote_400_labels_df = pd.Series(smote_400_labels)
+                X_train = pd.concat([X_train, smote_400_df])
+                y_train = pd.concat([y_train, smote_400_labels_df])
+
+                # smote data for 500 minutes (zero planes are late by 500 minutes so ignore)
+                # smote data for 600 minutes
+                mask = y_train == 600
+                train_600 = X_train[mask]
+                smote_600 = smote(train_600.to_numpy(), 99, 1)
+                smote_600_df = pd.DataFrame(smote_600, columns=X_train.columns)
+                smote_600_labels = 600 * np.ones(smote_600_df.shape[0]).astype(int)
+                smote_600_labels_df = pd.Series(smote_600_labels)
+                X_train = pd.concat([X_train, smote_600_df])
+                y_train = pd.concat([y_train, smote_600_labels_df])
+
+                '''
+                #smote data for 700 minutes (zero plantes are late by 700 minutes so ignore)
+                #smote data for 800 minutes, only 1 datapoint
+                mask = y_train == 800
+                print(sum(mask))
+                train_800 = X_train[mask]
+                smote_800 = smote(train_800.to_numpy(), 200, 1)
+                smote_800_df = pd.DataFrame(smote_800, columns=X_train.columns)
+                smote_800_labels = 800*np.ones(smote_800_df.shape[0]).astype(int)
+                smote_800_labels_df = pd.Series(smote_800_labels)
+                X_train = pd.concat([X_train, smote_800_df])
+                y_train = pd.concat([y_train, smote_800_labels_df])
+
+                #smote data for 900 minutes, only 1 datapoint
+                mask = y_train == 900
+                train_900 = X_train[mask]
+                smote_900 = smote(train_900.to_numpy(), 120, 1)
+                smote_900_df = pd.DataFrame(smote_900, columns=X_train.columns)
+                smote_900_labels = 900*np.ones(smote_900_df.shape[0]).astype(int)
+                smote_900_labels_df = pd.Series(smote_900_labels)
+                X_train = pd.concat([X_train, smote_900_df])
+                y_train = pd.concat([y_train, smote_900_labels_df])
+
+                #smote data for 1000 minutes, only 1 datapoint
+                mask = y_train == 1000
+                train_1000 = X_train[mask]
+                smote_1000 = smote(train_1000.to_numpy(), 120, 1)
+                smote_1000_df = pd.DataFrame(smote_1000, columns=X_train.columns)
+                smote_1000_labels = 1000*np.ones(smote_1000_df.shape[0]).astype(int)
+                smote_1000_labels_df = pd.Series(smote_1000_labels)
+                X_train = pd.concat([X_train, smote_1000_df])
+                y_train = pd.concat([y_train, smote_1000_labels_df])
+                '''
+
+                # smote data for more than 1000 minutes
+                mask = y_train == 10000
+                train_10000 = X_train[mask]
+                smote_10000 = smote(train_10000.to_numpy(), 120, 1)
+                smote_10000_df = pd.DataFrame(smote_10000, columns=X_train.columns)
+                smote_10000_labels = 1000 * np.ones(smote_10000_df.shape[0]).astype(int)
+                smote_10000_labels_df = pd.Series(smote_10000_labels)
+                X_train = pd.concat([X_train, smote_10000_df])
+                y_train = pd.concat([y_train, smote_10000_labels_df])
+        else:
+            y = flight_2016['Delay']
+            X = flight_2016.drop(['Arrival_Delay', 'Delay'], axis=1)
+            X_train, X_test, y_train, y_test = train_test_split(X,
+                                                                y,
+                                                                train_size=train_size,
+                                                                random_state=0)
+
+
 
     return X_train, X_test, y_train, y_test
 
