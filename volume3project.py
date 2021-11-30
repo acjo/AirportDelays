@@ -377,7 +377,7 @@ def best_elastic(X_train, X_test, y_train, y_test,binary):
             best_score (float) best accuracy from the data
             recall (recall) best recall score from the data
             hyperparameters (dictionary) best hyperparameters from the data'''
-
+    #something
     elastic_regression = ElasticNet()
     parameters = {'alpha':(.5,.8,1,1.2,1.5), 'l1_ratio':(.2,.3,.4,.5,.6,.7,.8),\
         'fit_intercept':(True,False), "normalize":(False,True)}
