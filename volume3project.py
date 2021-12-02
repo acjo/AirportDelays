@@ -293,8 +293,8 @@ def train_test_data(train_size=0.7, binary=False, smote_data=True, bin_data=True
                 X_train = pd.concat([X_train, smote_10000_df])
                 y_train = pd.concat([y_train, smote_10000_labels_df])
         else:
-            y = flight_2016['Delay']
-            X = flight_2016.drop(['Arrival_Delay', 'Delay'], axis=1)
+            y = flight_2016['Arrival_Delay']
+            X = flight_2016.drop(['Arrival_Delay'], axis=1)
             X_train, X_test, y_train, y_test = train_test_split(X,
                                                                 y,
                                                                 train_size=train_size,
@@ -520,12 +520,40 @@ def ols_reporter(X_train, X_test, y_train, y_test, binary, airport = True):
 #
 
 if __name__ == "__main__":
+    # Binary
+    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=True, smote_data=False)
+    print("Binary, no SMOTE, with Airports")
+    print(ols_reporter(X_train, X_test, y_train, y_test, True))
+    print("Binary, no SMOTE, without Airports")
+    print(ols_reporter(X_train, X_test, y_train, y_test, True, False))
+    
+    # Binned no SMOTE
+    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=False, bin_data = True)
+    print("Binned, no SMOTE, with Airports")
+    print(ols_reporter(X_train, X_test, y_train, y_test, False))
+    print("Binned, no SMOTE, without Airports")
+    print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
+    
+    # Binned w/ SMOTE
+    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=True, bin_data = True)
+    print("Binned, with SMOTE, with Airports")
+    print(ols_reporter(X_train, X_test, y_train, y_test, False))
+    print("Binned, with SMOTE, without Airports")
+    print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
+    
+    # Nonbinned no SMOTE
+    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=False, bin_data = False)
+    print("Not Binned, no SMOTE, with Airports")
+    print(ols_reporter(X_train, X_test, y_train, y_test, False))
+    print("Not Binned, no SMOTE, without Airports")
+    print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
+    
     #plot_data()
 
-    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=True, smote_data=False)
-    binary = True
-    print(ols_reporter(X_train, X_test, y_train, y_test, True))
-    print(ols_reporter(X_train, X_test, y_train, y_test, True, False))
+    #X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=True, smote_data=False)
+    #binary = True
+    #print(ols_reporter(X_train, X_test, y_train, y_test, True))
+    #print(ols_reporter(X_train, X_test, y_train, y_test, True, False))
     # print("Binary:")
     # print("KNN")
     # print(best_kNN(X_train, X_test, y_train, y_test,binary))
@@ -539,10 +567,10 @@ if __name__ == "__main__":
     # print(best_Gaussian(X_train, X_test, y_train, y_test,binary))
 
 
-    X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=False, bin_data=True)
-    binary = False
-    print(ols_reporter(X_train, X_test, y_train, y_test, False))
-    print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
+    #X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=False, bin_data=True)
+    #binary = False
+    #print(ols_reporter(X_train, X_test, y_train, y_test, False))
+    #print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
     # print("Not Binary")
     # print("KNN")
     # print(best_kNN(X_train, X_test, y_train, y_test,binary))
