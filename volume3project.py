@@ -522,30 +522,30 @@ def ols_reporter(X_train, X_test, y_train, y_test, binary, airport = True):
 if __name__ == "__main__":
     # Binary
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=True, smote_data=False)
-    print("Binary, no SMOTE, with Airports")
+    print("\n\n\n\nBinary, no SMOTE, with Airports\n\n")
     print(ols_reporter(X_train, X_test, y_train, y_test, True))
-    print("Binary, no SMOTE, without Airports")
+    print("\n\n\n\nBinary, no SMOTE, without Airports\n\n")
     print(ols_reporter(X_train, X_test, y_train, y_test, True, False))
     
     # Binned no SMOTE
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=False, bin_data = True)
-    print("Binned, no SMOTE, with Airports")
+    print("\n\n\n\nBinned, no SMOTE, with Airports\n\n")
     print(ols_reporter(X_train, X_test, y_train, y_test, False))
-    print("Binned, no SMOTE, without Airports")
+    print("\n\n\n\nBinned, no SMOTE, without Airports\n\n")
     print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
     
     # Binned w/ SMOTE
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=True, bin_data = True)
-    print("Binned, with SMOTE, with Airports")
+    print("\n\n\n\nBinned, with SMOTE, with Airports\n\n")
     print(ols_reporter(X_train, X_test, y_train, y_test, False))
-    print("Binned, with SMOTE, without Airports")
+    print("\n\n\n\nBinned, with SMOTE, without Airports\n\n")
     print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
     
     # Nonbinned no SMOTE
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=False, bin_data = False)
-    print("Not Binned, no SMOTE, with Airports")
+    print("\n\n\n\nNot Binned, no SMOTE, with Airports\n\n")
     print(ols_reporter(X_train, X_test, y_train, y_test, False))
-    print("Not Binned, no SMOTE, without Airports")
+    print("\n\n\n\nNot Binned, no SMOTE, without Airports\n\n")
     print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
     
     #plot_data()
