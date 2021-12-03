@@ -321,8 +321,8 @@ def best_kNN(X_train, X_test, y_train, y_test,binary):
             hyperparameters (dictionary) best hyperparameters from the data'''
 
     neighborclassifier = KNeighborsClassifier()
-    parameters = {'n_neighbors':[2,4], 'weights': ('uniform','distance'), \
-        'leaf_size':(20,30,40,50), "p":(1,2), "n_jobs":[-1]}
+    parameters = {'n_neighbors':[2,4, 6, 8, 10], 'weights': ('uniform','distance'), \
+        'leaf_size':(5, 10, 20,30,40,50), "p":(1,2, 3), "n_jobs":[-1], 'algorithm':['ball_tree', 'kd_tree', 'brute']}
     gridsearch = GridSearchCV(neighborclassifier, parameters)
     gridsearch.fit(X_train, y_train)
     prediction = gridsearch.predict(X_test)
@@ -333,7 +333,7 @@ def best_kNN(X_train, X_test, y_train, y_test,binary):
         return best_score, recall, best_params
     else:
         recall = recall_score(y_test,prediction, average='macro')
-        return best_score, recall, best_params
+        return best_score, recall, best_params,
 
 def best_logistic(X_train, X_test, y_train, y_test,binary):
     '''Calculates the best hyperparameters for the LogisticRegression, then uses those to
@@ -520,6 +520,34 @@ def ols_reporter(X_train, X_test, y_train, y_test, binary, airport = True):
 #
 
 if __name__ == "__main__":
+    # Binary
+    # X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=True, smote_data=False)
+    # print("\n\n\n\nBinary, no SMOTE, with Airports\n\n")
+    # print(ols_reporter(X_train, X_test, y_train, y_test, True))
+    # print("\n\n\n\nBinary, no SMOTE, without Airports\n\n")
+    # print(ols_reporter(X_train, X_test, y_train, y_test, True, False))
+    #
+    # # Binned no SMOTE
+    # X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=False, bin_data = True)
+    # print("\n\n\n\nBinned, no SMOTE, with Airports\n\n")
+    # print(ols_reporter(X_train, X_test, y_train, y_test, False))
+    # print("\n\n\n\nBinned, no SMOTE, without Airports\n\n")
+    # print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
+    #
+    # # Binned w/ SMOTE
+    # X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=True, bin_data = True)
+    # print("\n\n\n\nBinned, with SMOTE, with Airports\n\n")
+    # print(ols_reporter(X_train, X_test, y_train, y_test, False))
+    # print("\n\n\n\nBinned, with SMOTE, without Airports\n\n")
+    # print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
+    #
+    # # Nonbinned no SMOTE
+    # X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=False, smote_data=False, bin_data = False)
+    # print("\n\n\n\nNot Binned, no SMOTE, with Airports\n\n")
+    # print(ols_reporter(X_train, X_test, y_train, y_test, False))
+    # print("\n\n\n\nNot Binned, no SMOTE, without Airports\n\n")
+    # print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
+    
     #plot_data()
 
     X_train, X_test, y_train, y_test = train_test_data(train_size=0.7, binary=True, smote_data=False)
@@ -528,8 +556,8 @@ if __name__ == "__main__":
     print(ols_reporter(X_train, X_test, y_train, y_test, True, False))
     # print("Binary:")
     # print("KNN")
-    # print(best_kNN(X_train, X_test, y_train, y_test,binary))
-    # print("Logistic")
+    print(best_kNN(X_train, X_test, y_train, y_test,binary))
+    print("Logistic")
     # print(best_logistic(X_train, X_test, y_train, y_test,binary))
     # print("Random Forest Classifer")
     # print(best_random_forest_class(X_train, X_test, y_train, y_test,binary))
@@ -544,8 +572,8 @@ if __name__ == "__main__":
     print(ols_reporter(X_train, X_test, y_train, y_test, False))
     print(ols_reporter(X_train, X_test, y_train, y_test, False, False))
     # print("Not Binary")
-    # print("KNN")
-    # print(best_kNN(X_train, X_test, y_train, y_test,binary))
+    print("KNN")
+    print(best_kNN(X_train, X_test, y_train, y_test,binary))
     # print("Random Forest Classifer")
     # print(best_random_forest_class(X_train, X_test, y_train, y_test,binary))
     # print("Elastic")
